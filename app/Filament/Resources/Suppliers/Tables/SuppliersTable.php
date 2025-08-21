@@ -2,8 +2,6 @@
 
 namespace App\Filament\Resources\Suppliers\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -14,24 +12,28 @@ class SuppliersTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('name')
+                    ->label('الإسم')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label('الهاتف')
+                    ->sortable()
+                    ->alignCenter()
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('البريد')
+                    ->sortable()
+                    ->alignCenter()
                     ->searchable(),
                 TextColumn::make('address')
+                    ->label('العنوان')
+                    ->sortable()
+                    ->alignCenter()
+                    ->limit(50)
                     ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -39,11 +41,6 @@ class SuppliersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }

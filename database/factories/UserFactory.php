@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Center;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -27,8 +28,12 @@ class UserFactory extends Factory
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->unique()->numerify('091#######'),
             'password' => static::$password ??= Hash::make('091091'),
+            'center_id' => $attributes['center_id'] ?? Center::factory()->create()->id,
+            'active' => true,
             'remember_token' => Str::random(10),
+            'doctor' => fake()->boolean(),
         ];
     }
 

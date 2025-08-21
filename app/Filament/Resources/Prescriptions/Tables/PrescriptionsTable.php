@@ -15,6 +15,7 @@ class PrescriptionsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('patient.name')
                     ->label('المريض')
@@ -55,7 +56,7 @@ class PrescriptionsTable
                         ->action(fn($record) => $record->update(['dispensed' => true, 'dispensed_date' => now()]))
                         ->requiresConfirmation()
                         ->color('success')
-                        ->visible(fn($record) => !$record->despensed && $record->items->isNotEmpty()),
+                        ->visible(fn($record) => !$record->dispensed),
                 ]),
                 EditAction::make(),
             ]);

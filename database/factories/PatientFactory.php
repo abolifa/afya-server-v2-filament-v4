@@ -2,13 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Center;
+use App\Models\Device;
+use App\Models\Patient;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Patient>
+ * @extends Factory<Patient>
  */
 class PatientFactory extends Factory
 {
+    protected static ?string $password;
+
     /**
      * Define the model's default state.
      *
@@ -17,7 +24,21 @@ class PatientFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'file_number' => $this->faker->unique()->numerify('########'),
+            'national_id' => $this->faker->unique()->numerify('11##########'),
+            'family_issue_number' => $this->faker->optional()->numerify('##########'),
+            'name' => $this->faker->name(),
+            'phone' => $this->faker->unique()->numerify('09########'),
+            'password' => static::$password ??= Hash::make('091091'),
+            'email' => $this->faker->boolean(70) ? Str::lower(Str::uuid()) . '@example.com' : null,
+            'gender' => $this->faker->randomElement(['male', 'female']),
+            'dob' => $this->faker->optional()->date(),
+            'blood_group' => $this->faker->optional()->randomElement(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-']),
+            'image' => null,
+            'verified' => $this->faker->boolean(),
+            'center_id' => $attributes['center_id'] ?? Center::factory()->create()->id,
+            'device_id' => Device::factory(),
+            'remember_token' => Str::random(10),
         ];
     }
 }

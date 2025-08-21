@@ -67,15 +67,15 @@ class AppointmentForm
                         ->label('الجهاز')
                         ->searchable()
                         ->preload()
-                        ->options(
-                            Device::all()->mapWithKeys(function ($device) {
+                        ->options(fn() => Device::query()
+                            ->get()
+                            ->mapWithKeys(function ($device) {
                                 $label = $device->name;
                                 if (!$device->active) {
                                     $label .= ' (جهاز موقوف)';
                                 }
                                 return [$device->id => $label];
-                            })->toArray()
-                        )
+                            }))
                         ->disableOptionWhen(fn($value) => !Device::find($value)?->active),
                 ]),
 

@@ -97,6 +97,12 @@ class PrescriptionForm
                     Repeater::make('items')
                         ->label('الأصناف')
                         ->relationship('items')
+                        ->minItems(1)
+                        ->required()
+                        ->validationMessages([
+                            'required' => 'يجب إضافة صنف واحد على الأقل',
+                            'items.min_items' => 'يجب إضافة صنف واحد على الأقل',
+                        ])
                         ->schema([
                             Select::make('product_id')
                                 ->label('الدواء')

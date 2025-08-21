@@ -1,32 +1,49 @@
 <?php
 
-namespace App\Filament\Resources\Appointments\Tables;
+namespace App\Filament\Widgets;
 
+use App\Models\Appointment;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
 
-class AppointmentsTable
+class LatestPendingAppointments extends TableWidget
 {
-    public static function configure(Table $table): Table
+    protected int|string|array $columnSpan = 'full';
+
+    public function table(Table $table): Table
     {
         return $table
-            ->defaultSort('date', 'desc')
+            ->paginated(false)
+            ->heading('أحدث المواعيد المعلقة')
+            ->emptyStateHeading('لا توجد مواعيد معلقة')
+            ->emptyStateIcon('fas-calendar-alt')
+            ->query(
+                Appointment::with(['patient', 'doctor', 'center', 'order'])
+                    ->where('status', 'pending')
+                    ->latest()
+                    ->limit(5),
+            )
+            ->recordUrl(fn($record) => route('filament.admin.resources.appointments.view', $record->id))
+            ->headerActions([
+                Action::make('viewAll')
+                    ->label('عرض الكل')
+                    ->url(route('filament.admin.resources.appointments.index'))
+                    ->icon('fas-list')
+                    ->button()
+                    ->size('sm')
+                    ->color('secondary'),
+            ])
             ->columns([
                 TextColumn::make('patient.name')
-                    ->label('المريض')
-                    ->sortable()
-                    ->searchable(),
+                    ->label('المريض'),
                 TextColumn::make('center.name')
                     ->label('المركز')
-                    ->sortable()
                     ->alignCenter()
                     ->tooltip(function ($state, $record) {
                         $patientCenterId = $record->patient?->center_id;
@@ -47,26 +64,20 @@ class AppointmentsTable
                         return $patientCenterId !== $appointmentCenterId
                             ? 'danger'
                             : null;
-                    })
-                    ->searchable(),
+                    }),
                 TextColumn::make('doctor.name')
                     ->label('الطبيب')
-                    ->sortable()
-                    ->alignCenter()
-                    ->searchable(),
+                    ->alignCenter(),
                 TextColumn::make('date')
                     ->label('التاريخ')
                     ->date('d/m/Y')
-                    ->alignCenter()
-                    ->sortable(),
+                    ->alignCenter(),
                 TextColumn::make('time')
                     ->label('الوقت')
                     ->time('h:i A')
-                    ->alignCenter()
-                    ->sortable(),
+                    ->alignCenter(),
                 TextColumn::make('status')
                     ->label('الحالة')
-                    ->sortable()
                     ->alignCenter()
                     ->formatStateUsing(fn($state) => match ($state) {
                         'pending' => 'قيد الانتظار',
@@ -82,52 +93,13 @@ class AppointmentsTable
                         'cancelled' => 'danger',
                         'completed' => 'info',
                         default => 'secondary',
-                    })
-                    ->searchable(),
-                IconColumn::make('intended')
-                    ->label('حضور')
-                    ->alignCenter()
-                    ->boolean(),
-                TextColumn::make('device.name')
-                    ->label('الجهاز')
-                    ->sortable()
-                    ->alignCenter()
-                    ->toggleable(isToggledHiddenByDefault: true)
-                    ->searchable(),
+                    }),
             ])
             ->filters([
-                SelectFilter::make('status')
-                    ->label('الحالة')
-                    ->options([
-                        'pending' => 'قيد الانتظار',
-                        'confirmed' => 'مؤكد',
-                        'cancelled' => 'ملغي',
-                        'completed' => 'مكتمل',
-                    ]),
-                SelectFilter::make('intended')
-                    ->label('حضور')
-                    ->options([
-                        true => 'حضور',
-                        false => 'غياب',
-                    ])->default('true'),
-                SelectFilter::make('center_id')
-                    ->label('المركز')
-                    ->relationship('center', 'name')
-                    ->searchable(),
-                SelectFilter::make('doctor_id')
-                    ->label('الطبيب')
-                    ->relationship('doctor', 'name')
-                    ->searchable(),
-                SelectFilter::make('device_id')
-                    ->label('الجهاز')
-                    ->relationship('device', 'name')
-                    ->searchable(),
+                //
             ])
             ->recordActions([
                 ActionGroup::make([
-                    ViewAction::make('view'),
-
-                    // Confirm
                     Action::make('confirm')
                         ->label('تأكيد')
                         ->color('success')
@@ -184,9 +156,15 @@ class AppointmentsTable
                             ]);
                         })
                         ->visible(fn($record) => $record->status !== 'completed'),
-                ]),
+                ])
+                    ->link()
+                    ->label('إجراءات'),
 
-                EditAction::make(),
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    //
+                ]),
             ]);
     }
 }

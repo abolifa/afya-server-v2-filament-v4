@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Center;
+use App\Models\TransferInvoice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TransferInvoice>
+ * @extends Factory<TransferInvoice>
  */
 class TransferInvoiceFactory extends Factory
 {
@@ -17,7 +19,11 @@ class TransferInvoiceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'from_center_id' => Center::factory(),
+            'to_center_id' => Center::factory(),
+            'status' => $this->faker->randomElement([
+                'pending', 'confirmed', 'cancelled'
+            ]),
         ];
     }
 }

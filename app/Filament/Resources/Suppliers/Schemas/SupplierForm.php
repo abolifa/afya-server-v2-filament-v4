@@ -12,13 +12,16 @@ class SupplierForm
         return $schema
             ->components([
                 TextInput::make('name')
+                    ->label('إسم المورد')
                     ->required(),
                 TextInput::make('phone')
+                    ->label('رقم الهاتف')
                     ->tel(),
                 TextInput::make('email')
-                    ->label('Email address')
+                    ->label('البريد الإلكتروني')
                     ->email(),
-                TextInput::make('address'),
+                TextInput::make('address')
+                    ->label('العنوان'),
             ]);
     }
 }

@@ -14,6 +14,7 @@ class PatientsTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('created_at', 'desc')
             ->columns([
                 TextColumn::make('file_number')
                     ->label('رقم الملف')
@@ -34,6 +35,7 @@ class PatientsTable
                 TextColumn::make('family_issue_number')
                     ->label('رقم القيد')
                     ->alignCenter()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->searchable(),
                 TextColumn::make('phone')
@@ -49,6 +51,7 @@ class PatientsTable
                     ->label('الجهاز')
                     ->alignCenter()
                     ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->placeholder('غير محدد')
                     ->searchable(),
                 IconColumn::make('verified')
@@ -56,7 +59,6 @@ class PatientsTable
                     ->alignCenter()
                     ->sortable()
                     ->boolean(),
-
                 TextColumn::make('email')
                     ->label('البريد')
                     ->sortable()

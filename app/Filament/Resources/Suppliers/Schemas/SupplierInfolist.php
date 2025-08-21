@@ -11,14 +11,19 @@ class SupplierInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
-                TextEntry::make('phone'),
+                TextEntry::make('name')
+                    ->label('إسم المورد'),
+                TextEntry::make('phone')
+                    ->label('رقم الهاتف'),
                 TextEntry::make('email')
-                    ->label('Email address'),
-                TextEntry::make('address'),
+                    ->label('البريد الإلكتروني'),
+                TextEntry::make('address')
+                    ->label('العنوان'),
                 TextEntry::make('created_at')
+                    ->label('تاريخ الإنشاء')
                     ->dateTime(),
                 TextEntry::make('updated_at')
+                    ->label('تاريخ التحديث')
                     ->dateTime(),
             ]);
     }

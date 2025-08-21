@@ -2,23 +2,30 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\LatestOrders;
+use App\Filament\Widgets\LatestPendingAppointments;
+use App\Filament\Widgets\LowStockProducts;
+use App\Filament\Widgets\SystemState;
+use App\Filament\Widgets\TopAppointmentPerCenter;
+use App\Filament\Widgets\TopCentersOrders;
+use App\Filament\Widgets\TopUsedDevices;
+use App\Filament\Widgets\TopUsedProducts;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+
+//use Filament\Pages\Dashboard;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -37,18 +44,23 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->font('Noto Kufi Arabic')
             ->profile()
-            ->sidebarWidth('280px')
+            ->sidebarWidth('15rem')
             ->maxContentWidth('6xl')
+            ->sidebarCollapsibleOnDesktop()
             ->brandName('نظام عافية الطبي')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
-            ->pages([
-                Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
+            ->pages([])
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                SystemState::class,
+                LatestPendingAppointments::class,
+                TopUsedProducts::class,
+                TopAppointmentPerCenter::class,
+                LowStockProducts::class,
+                TopCentersOrders::class,
+                TopUsedDevices::class,
+                LatestOrders::class,
+
             ])
             ->middleware([
                 EncryptCookies::class,

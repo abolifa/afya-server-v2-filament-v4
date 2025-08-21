@@ -2,10 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Patient;
+use App\Models\User;
+use App\Models\Vital;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Vital>
+ * @extends Factory<Vital>
  */
 class VitalFactory extends Factory
 {
@@ -17,7 +20,17 @@ class VitalFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'patient_id' => Patient::factory(),
+            'doctor_id' => User::factory(),
+            'recorded_at' => $this->faker->date(),
+            'weight' => $this->faker->randomFloat(2, 40, 120),
+            'systolic' => $this->faker->randomFloat(2, 90, 180),
+            'diastolic' => $this->faker->randomFloat(2, 60, 120),
+            'heart_rate' => $this->faker->randomFloat(2, 60, 150),
+            'temperature' => $this->faker->randomFloat(2, 36, 40),
+            'oxygen_saturation' => $this->faker->randomFloat(2, 90, 100),
+            'sugar_level' => $this->faker->randomFloat(2, 70, 180),
+            'notes' => $this->faker->text(),
         ];
     }
 }

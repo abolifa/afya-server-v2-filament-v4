@@ -2,11 +2,8 @@
 
 namespace App\Filament\Resources\StockMovements;
 
-use App\Filament\Resources\StockMovements\Pages\CreateStockMovement;
-use App\Filament\Resources\StockMovements\Pages\EditStockMovement;
 use App\Filament\Resources\StockMovements\Pages\ListStockMovements;
 use App\Filament\Resources\StockMovements\Pages\ViewStockMovement;
-use App\Filament\Resources\StockMovements\Schemas\StockMovementForm;
 use App\Filament\Resources\StockMovements\Schemas\StockMovementInfolist;
 use App\Filament\Resources\StockMovements\Tables\StockMovementsTable;
 use App\Models\StockMovement;
@@ -24,10 +21,6 @@ class StockMovementResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'fab-stack-overflow';
 
-    public static function form(Schema $schema): Schema
-    {
-        return StockMovementForm::configure($schema);
-    }
 
     public static function infolist(Schema $schema): Schema
     {
@@ -50,9 +43,7 @@ class StockMovementResource extends Resource
     {
         return [
             'index' => ListStockMovements::route('/'),
-            'create' => CreateStockMovement::route('/create'),
             'view' => ViewStockMovement::route('/{record}'),
-            'edit' => EditStockMovement::route('/{record}/edit'),
         ];
     }
 }

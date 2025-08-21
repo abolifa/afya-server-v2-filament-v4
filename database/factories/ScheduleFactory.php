@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Center;
+use App\Models\Schedule;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Schedule>
+ * @extends Factory<Schedule>
  */
 class ScheduleFactory extends Factory
 {
@@ -17,7 +19,11 @@ class ScheduleFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'center_id' => Center::factory(),
+            'day' => $this->faker->randomElement(['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']),
+            'start_time' => $this->faker->time('H:i'),
+            'end_time' => $this->faker->time('H:i'),
+            'is_active' => $this->faker->boolean(),
         ];
     }
 }

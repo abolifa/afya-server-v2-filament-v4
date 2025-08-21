@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Appointments\Schemas;
 
 use App\Filament\Infolists\Components\TableEntry;
+use Filament\Actions\Action;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
@@ -70,7 +71,19 @@ class AppointmentInfolist
                 Section::make([
                     TableEntry::make('order.items')
                         ->label('عناصر الطلب'),
-                ])->columnSpanFull(),
+                ])->columnSpanFull()
+                    ->headerActions([
+                        Action::make('view_order')
+                            ->label('مشاهدة الطلب')
+                            ->icon('fas-arrow-right')
+                            ->button()
+                            ->color('secondary')
+                            ->size('sm')
+                            ->visible(fn($record) => optional($record->order)->exists)
+                            ->url(fn($record) => optional($record->order)->id
+                                ? route('filament.admin.resources.orders.view', ['record' => $record->order->id])
+                                : null),
+                    ]),
             ]);
     }
 }

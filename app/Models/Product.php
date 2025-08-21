@@ -14,15 +14,12 @@ class Product extends Model
 
     protected $fillable = ['type', 'name', 'image', 'expiry_date', 'description', 'usage', 'alert_threshold'];
 
-    public function orderItems(): HasMany
-    {
-        return $this->hasMany(OrderItem::class);
-    }
+    protected $appends = ['stock'];
 
-    public function invoiceItems(): HasMany
-    {
-        return $this->hasMany(InvoiceItem::class);
-    }
+//    public function getStockAttribute(): int
+//    {
+//        return CommonHelpers::getStock($this->id);
+//    }
 
     public function transferItems(): HasMany
     {
@@ -37,6 +34,29 @@ class Product extends Model
     public function prescriptionItems(): HasMany
     {
         return $this->hasMany(PrescriptionItem::class);
+    }
+
+    public function getStockAttribute(): int
+    {
+        $invoices = $this->invoiceItems()
+            ->whereHas('invoice', fn($q) => $q->where('status', 'confirmed'))
+            ->sum('quantity');
+
+        $orders = $this->orderItems()
+            ->whereHas('order', fn($q) => $q->where('status', 'confirmed'))
+            ->sum('quantity');
+
+        return $invoices - $orders;
+    }
+
+    public function invoiceItems(): HasMany
+    {
+        return $this->hasMany(InvoiceItem::class);
+    }
+
+    public function orderItems(): HasMany
+    {
+        return $this->hasMany(OrderItem::class);
     }
 
 }

@@ -1,40 +1,50 @@
 <?php
 
-namespace App\Filament\Resources\Invoices\Tables;
+namespace App\Filament\Widgets;
 
+use App\Models\Order;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
 
-class InvoicesTable
+class LatestOrders extends TableWidget
 {
-    public static function configure(Table $table): Table
+
+    protected int|string|array $columnSpan = 'full';
+
+    public function table(Table $table): Table
     {
         return $table
-            ->defaultSort('created_at', 'desc')
+            ->heading('أحدث الطلبات المعلقة')
+            ->emptyStateHeading('لا توجد طلبات معلقة')
+            ->emptyStateIcon('fas-box-open')
+            ->query(
+                Order::query()
+                    ->with('items')
+                    ->where('status', 'pending')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(5),
+            )
+            ->paginated(false)
             ->columns([
+                TextColumn::make('patient.name')
+                    ->label('المريض'),
                 TextColumn::make('center.name')
                     ->label('المركز')
-                    ->sortable()
-                    ->searchable(),
-                TextColumn::make('supplier.name')
-                    ->label('المورد')
                     ->alignCenter()
-                    ->sortable()
-                    ->searchable(),
+                    ->placeholder('-'),
                 TextColumn::make('status')
                     ->label('الحالة')
-                    ->sortable()
+                    ->alignCenter()
                     ->formatStateUsing(fn($state) => match ($state) {
                         'pending' => 'قيد الإنتظار',
                         'confirmed' => 'مؤكد',
                         'cancelled' => 'ملغي',
                         default => 'غير معروف',
                     })->badge()
-                    ->alignCenter()
                     ->color(fn($state) => match ($state) {
                         'pending' => 'warning',
                         'confirmed' => 'success',
@@ -51,9 +61,17 @@ class InvoicesTable
             ->filters([
                 //
             ])
+            ->headerActions([
+                Action::make('viewAll')
+                    ->label('عرض الكل')
+                    ->url(route('filament.admin.resources.orders.index'))
+                    ->icon('fas-list')
+                    ->button()
+                    ->size('sm')
+                    ->color('secondary'),
+            ])
             ->recordActions([
                 ActionGroup::make([
-                    ViewAction::make(),
                     Action::make('confirm')
                         ->label('تأكيد')
                         ->icon('heroicon-o-check')
@@ -68,8 +86,15 @@ class InvoicesTable
                         ->requiresConfirmation()
                         ->visible(fn($record) => $record->status === 'pending')
                         ->action(fn($record) => $record->update(['status' => 'cancelled'])),
+                ])
+                    ->link()
+                    ->label('إجراءات'),
+            ])
+            ->recordUrl(fn($record) => route('filament.admin.resources.orders.view', $record->id))
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    //
                 ]),
-                EditAction::make(),
             ]);
     }
 }
