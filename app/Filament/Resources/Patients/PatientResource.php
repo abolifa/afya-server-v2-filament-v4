@@ -6,6 +6,7 @@ use App\Filament\Resources\Patients\Pages\CreatePatient;
 use App\Filament\Resources\Patients\Pages\EditPatient;
 use App\Filament\Resources\Patients\Pages\ListPatients;
 use App\Filament\Resources\Patients\Pages\ViewPatient;
+use App\Filament\Resources\Patients\RelationManagers\VitalsRelationManager;
 use App\Filament\Resources\Patients\Schemas\PatientForm;
 use App\Filament\Resources\Patients\Schemas\PatientInfolist;
 use App\Filament\Resources\Patients\Tables\PatientsTable;
@@ -14,15 +15,20 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PatientResource extends Resource
 {
     protected static ?string $model = Patient::class;
 
+
     protected static ?string $label = 'مريض';
     protected static ?string $pluralLabel = 'المرضى';
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-user-injured';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المرضى';
+
 
     public static function form(Schema $schema): Schema
     {
@@ -42,7 +48,7 @@ class PatientResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            VitalsRelationManager::class,
         ];
     }
 

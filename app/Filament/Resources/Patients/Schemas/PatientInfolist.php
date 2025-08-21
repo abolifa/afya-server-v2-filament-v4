@@ -16,7 +16,8 @@ class PatientInfolist
                 ImageEntry::make('image')
                     ->label('الصورة الشخصية')
                     ->imageSize(80),
-                TextEntry::make('name'),
+                TextEntry::make('name')
+                    ->label('اسم المريض'),
                 TextEntry::make('national_id')
                     ->label('الرقم الوطني'),
                 TextEntry::make('file_number')

@@ -25,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
             'indigo' => Color::Indigo,
             'purple' => Color::Purple,
             'gold' => Color::Yellow,
+            'slate' => Color::Slate,
         ]);
     }
 

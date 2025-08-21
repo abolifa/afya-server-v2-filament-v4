@@ -10,11 +10,13 @@ use App\Filament\Widgets\TopAppointmentPerCenter;
 use App\Filament\Widgets\TopCentersOrders;
 use App\Filament\Widgets\TopUsedDevices;
 use App\Filament\Widgets\TopUsedProducts;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Exception;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -40,13 +42,29 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
-                'primary' => Color::Emerald,
+                'primary' => Color::Indigo,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make('إدارة المرضى')
+                    ->icon('fas-shopping-cart')
+                    ->collapsed(false),
+                NavigationGroup::make('إدارة المخزون')
+                    ->icon('fas-box-open')
+                    ->collapsed(false),
+                NavigationGroup::make('إدارة الموارد')
+                    ->icon('fas-building')
+                    ->collapsed(false),
+                NavigationGroup::make('إدارة المشتريات')
+                    ->icon('fas-shopping-basket')
+                    ->collapsed(false),
+                NavigationGroup::make('إدارة الحسابات')
+                    ->icon('fas-users')
+                    ->collapsed(false),
             ])
             ->font('Noto Kufi Arabic')
             ->profile()
-            ->sidebarWidth('15rem')
-            ->maxContentWidth('6xl')
             ->sidebarCollapsibleOnDesktop()
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('نظام عافية الطبي')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
@@ -72,6 +90,9 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+            ])
+            ->plugins([
+                FilamentShieldPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,

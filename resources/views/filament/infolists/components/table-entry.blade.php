@@ -37,6 +37,7 @@
                 <tr>
                     <th>رقم</th>
                     <th>الصنف</th>
+                    <th>وحدة القياس</th>
                     <th>الكمية</th>
                 </tr>
                 </thead>
@@ -45,6 +46,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $item->product->name }}</td>
+                        <td>{{ $item->unit->name }}-{{ $item->unit->conversion_factor }}</td>
                         <td>{{ $item->quantity }}</td>
                     </tr>
                 @endforeach

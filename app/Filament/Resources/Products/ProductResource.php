@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class ProductResource extends Resource
 {
@@ -23,6 +24,9 @@ class ProductResource extends Resource
     protected static ?string $pluralLabel = 'الأصناف';
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-box-open';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المخزون';
+
 
     public static function form(Schema $schema): Schema
     {

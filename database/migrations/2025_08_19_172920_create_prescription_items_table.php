@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('prescription_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('unit_id')->nullable()->constrained('units')->nullOnDelete();
             $table->enum('frequency', ['daily', 'weekly', 'monthly'])->default('daily')->index();
             $table->unsignedTinyInteger('interval')->default(1);
             $table->unsignedTinyInteger('times_per_interval')->default(1);

@@ -26,6 +26,9 @@ class UserInfolist
                 IconEntry::make('doctor')
                     ->label('طبيب')
                     ->boolean(),
+                IconEntry::make('can_see_all_stock')
+                    ->label('يمكنه رؤية كل المخزون')
+                    ->boolean(),
                 TextEntry::make('created_at')
                     ->label('تاريخ الإنشاء')
                     ->dateTime(),

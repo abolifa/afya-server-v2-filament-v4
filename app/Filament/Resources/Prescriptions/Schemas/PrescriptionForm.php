@@ -85,7 +85,7 @@ class PrescriptionForm
                     BooleanField::make('dispensed')
                         ->label('تم الصرف')
                         ->dehydrated()
-                        ->disabled(fn($record) => $record->dispensed == true)
+                        ->disabled(fn($record) => $record?->dispensed == true ?? false)
                         ->default(false),
                     Textarea::make('notes')
                         ->label('ملاحظات')

@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class OrderResource extends Resource
 {
@@ -23,6 +24,8 @@ class OrderResource extends Resource
 
     protected static ?string $label = 'طلب';
     protected static ?string $pluralLabel = 'طلبات المرضى';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المرضى';
 
 
     public static function form(Schema $schema): Schema

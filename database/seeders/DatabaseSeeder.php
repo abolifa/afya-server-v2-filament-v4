@@ -131,7 +131,7 @@ class DatabaseSeeder extends Seeder
 
         // 9. Create Vitals for random Patients
         $patients->random(30)->each(function (Patient $patient) {
-            Vital::factory(rand(1, 3))
+            Vital::factory(30)
                 ->create(['patient_id' => $patient->id]);
         });
     }

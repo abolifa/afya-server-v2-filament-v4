@@ -34,6 +34,9 @@ class UserForm
                 BooleanField::make('doctor')
                     ->label('طبيب')
                     ->default(false),
+                BooleanField::make('can_see_all_stock')
+                    ->label('يمكنه رؤية كل المخزون')
+                    ->default(false),
             ]);
     }
 }

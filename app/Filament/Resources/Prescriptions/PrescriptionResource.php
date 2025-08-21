@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class PrescriptionResource extends Resource
 {
@@ -23,6 +24,9 @@ class PrescriptionResource extends Resource
     protected static ?string $pluralLabel = 'الوصفات الطبية';
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-prescription-bottle';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المرضى';
+
 
     public static function form(Schema $schema): Schema
     {

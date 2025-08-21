@@ -81,6 +81,8 @@ class PatientForm
                     Select::make('center_id')
                         ->label('المركز')
                         ->required()
+                        ->searchable()
+                        ->preload()
                         ->default(auth()->user()->center_id ?? null)
                         ->relationship('center', 'name'),
                     Select::make('device_id')

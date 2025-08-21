@@ -9,6 +9,7 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Product;
 use BackedEnum;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -18,14 +19,17 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class Stock extends Page implements HasTable, HasForms
 {
-    use InteractsWithTable, InteractsWithForms;
+    use InteractsWithTable, InteractsWithForms, HasPageShield;
 
     protected static string|null|BackedEnum $navigationIcon = 'fas-warehouse';
     protected static ?string $navigationLabel = 'المخزن';
     protected static ?string $title = 'المخزن';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المخزون';
     public bool $excludeZeros = false;
     public ?int $selectedCenterId = null;
 

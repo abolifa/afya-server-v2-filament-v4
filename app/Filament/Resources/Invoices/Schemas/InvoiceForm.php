@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Invoices\Schemas;
 
+use App\Models\Unit;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -47,9 +48,11 @@ class InvoiceForm
                         ->relationship('items')
                         ->table([
                             Repeater\TableColumn::make('الصنف')
-                                ->width('50%'),
+                                ->width('33.33%'),
+                            Repeater\TableColumn::make('وحدة القياس')
+                                ->width('33.33%'),
                             Repeater\TableColumn::make('الكمية')
-                                ->width('50%'),
+                                ->width('33.33%'),
                         ])
                         ->schema([
                             Select::make('product_id')
@@ -58,13 +61,24 @@ class InvoiceForm
                                 ->searchable()
                                 ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                 ->preload(),
+                            Select::make('unit_id')
+                                ->searchable()
+                                ->options(fn() => Unit::query()
+                                    ->get()
+                                    ->mapWithKeys(fn($unit) => [
+                                        $unit->id => "{$unit->name} - {$unit->conversion_factor}"
+                                    ])
+                                    ->toArray()
+                                )
+                                ->preload()
+                                ->required(),
                             TextInput::make('quantity')
                                 ->required()
                                 ->default(1)
                                 ->minValue(1)
                                 ->maxValue(1000)
                                 ->numeric(),
-                        ])->columns()
+                        ])->columns(3)
                         ->minItems(1)
                         ->validationMessages([
                             'min' => 'يجب إضافة صنف واحد على الأقل',

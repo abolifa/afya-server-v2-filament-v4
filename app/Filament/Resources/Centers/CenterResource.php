@@ -6,6 +6,7 @@ use App\Filament\Resources\Centers\Pages\CreateCenter;
 use App\Filament\Resources\Centers\Pages\EditCenter;
 use App\Filament\Resources\Centers\Pages\ListCenters;
 use App\Filament\Resources\Centers\Pages\ViewCenter;
+use App\Filament\Resources\Centers\RelationManagers\SchedulesRelationManager;
 use App\Filament\Resources\Centers\Schemas\CenterForm;
 use App\Filament\Resources\Centers\Schemas\CenterInfolist;
 use App\Filament\Resources\Centers\Tables\CentersTable;
@@ -14,6 +15,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class CenterResource extends Resource
 {
@@ -22,6 +24,9 @@ class CenterResource extends Resource
 
     protected static ?string $label = 'مركز';
     protected static ?string $pluralLabel = 'المراكز';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة الموارد';
+
 
     public static function form(Schema $schema): Schema
     {
@@ -41,7 +46,7 @@ class CenterResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SchedulesRelationManager::class,
         ];
     }
 

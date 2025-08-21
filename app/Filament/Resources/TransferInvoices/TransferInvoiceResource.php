@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class TransferInvoiceResource extends Resource
 {
@@ -23,6 +24,8 @@ class TransferInvoiceResource extends Resource
     protected static ?string $pluralLabel = 'تحويل المخزون';
 
     protected static string|BackedEnum|null $navigationIcon = 'gmdi-move-up-o';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المخزون';
 
     public static function form(Schema $schema): Schema
     {

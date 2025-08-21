@@ -1,0 +1,31 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+
+.fi-sidebar-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.fi-sidebar-nav {
+    -ms-overflow-style: none;
+    scrollbar-width: thin;
+    scrollbar-color: #c1c1c1 transparent;
+}
+
+.dark .fi-sidebar-nav {
+    scrollbar-color: #3b3b3b transparent;
+}
+
+
+* {
+    scroll-behavior: smooth;
+}
+
+/***********************************************/
+
+
+aside.fi-sidebar {
+    @apply bg-white dark:bg-gray-900 border-l border-l-gray-200 dark:border-l-gray-800;
+}

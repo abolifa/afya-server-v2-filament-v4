@@ -20,7 +20,7 @@ class Patient extends Authenticatable
     protected $fillable = [
         'file_number', 'national_id', 'family_issue_number', 'name', 'phone',
         'password', 'email', 'gender', 'dob', 'blood_group', 'image', 'verified',
-        'center_id', 'device_id'
+        'center_id', 'device_id',
     ];
 
     public function center(): BelongsTo

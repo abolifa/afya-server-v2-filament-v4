@@ -14,7 +14,8 @@ class PrescriptionItem extends Model
 
     protected $fillable = [
         'prescription_id', 'product_id', 'frequency', 'interval',
-        'times_per_interval', 'dose_amount', 'dose_unit', 'start_date', 'end_date'
+        'times_per_interval', 'dose_amount', 'dose_unit', 'start_date', 'end_date',
+        'unit_id'
     ];
 
     public function prescription(): BelongsTo
@@ -25,5 +26,10 @@ class PrescriptionItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
     }
 }

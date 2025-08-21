@@ -34,6 +34,7 @@ class UserFactory extends Factory
             'active' => true,
             'remember_token' => Str::random(10),
             'doctor' => fake()->boolean(),
+            'can_see_all_stock' => fake()->boolean(),
         ];
     }
 

@@ -11,6 +11,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class StockMovementResource extends Resource
 {
@@ -20,6 +21,8 @@ class StockMovementResource extends Resource
     protected static ?string $pluralLabel = 'حركات المخزون';
 
     protected static string|BackedEnum|null $navigationIcon = 'fab-stack-overflow';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المخزون';
 
 
     public static function infolist(Schema $schema): Schema

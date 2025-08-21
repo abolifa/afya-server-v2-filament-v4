@@ -14,12 +14,15 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class InvoiceResource extends Resource
 {
     protected static ?string $model = Invoice::class;
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-file-invoice';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المشتريات';
 
     protected static ?string $label = 'فاتورة';
     protected static ?string $pluralLabel = 'فواتير المشتريات';

@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class DeviceResource extends Resource
 {
@@ -23,6 +24,9 @@ class DeviceResource extends Resource
 
     protected static ?string $label = 'جهاز';
     protected static ?string $pluralLabel = 'الأجهزة';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة الموارد';
+
 
     public static function form(Schema $schema): Schema
     {

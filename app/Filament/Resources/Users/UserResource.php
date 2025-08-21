@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class UserResource extends Resource
 {
@@ -23,6 +24,9 @@ class UserResource extends Resource
     protected static ?string $pluralLabel = 'المستخدمين';
 
     protected static string|BackedEnum|null $navigationIcon = 'fas-users';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة الحسابات';
+
 
     public static function form(Schema $schema): Schema
     {

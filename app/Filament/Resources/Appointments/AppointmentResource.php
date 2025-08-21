@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class AppointmentResource extends Resource
 {
@@ -23,6 +24,8 @@ class AppointmentResource extends Resource
 
     protected static ?string $label = 'موعد';
     protected static ?string $pluralLabel = 'المواعيد';
+
+    protected static string|null|UnitEnum $navigationGroup = 'إدارة المرضى';
 
     public static function form(Schema $schema): Schema
     {

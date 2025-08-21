@@ -12,7 +12,7 @@ class InvoiceItem extends Model
     /** @use HasFactory<InvoiceItemFactory> */
     use HasFactory;
 
-    protected $fillable = ['invoice_id', 'product_id', 'quantity'];
+    protected $fillable = ['invoice_id', 'product_id', 'quantity', 'unit_id'];
 
     public function invoice(): BelongsTo
     {
@@ -22,5 +22,10 @@ class InvoiceItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function unit(): BelongsTo
+    {
+        return $this->belongsTo(Unit::class);
     }
 }

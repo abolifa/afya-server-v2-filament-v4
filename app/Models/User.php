@@ -11,11 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +31,7 @@ class User extends Authenticatable implements FilamentUser
         'active',
         'doctor',
         'password',
+        'can_see_all_stock',
     ];
 
     /**
@@ -78,6 +80,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'active' => 'boolean',
             'doctor' => 'boolean',
+            'can_see_all_stock' => 'boolean',
         ];
     }
 
