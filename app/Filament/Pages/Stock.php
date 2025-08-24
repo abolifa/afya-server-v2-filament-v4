@@ -19,6 +19,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
 class Stock extends Page implements HasTable, HasForms
@@ -35,26 +36,28 @@ class Stock extends Page implements HasTable, HasForms
 
     protected string $view = 'filament.pages.stock';
 
+    public function mount(): void
+    {
+        if (!Auth::user()->can_see_all_stock && is_null(Auth::user()->center_id)) {
+            abort(403, 'لا يمكنك عرض المخزون.');
+        }
+        $this->selectedCenterId = Auth::user()->center_id;
+    }
+
     public function table(Table $table): Table
     {
         return $table
             ->query(function () {
                 $query = Product::query();
-
                 if ($this->excludeZeros) {
-                    // Filter products by real stock using a collection
                     $ids = $query->get()
                         ->filter(fn($product) => CommonHelpers::getStock($product->id, $this->selectedCenterId) > 0)
                         ->pluck('id');
-
                     if ($ids->isEmpty()) {
-                        // Return empty query
                         return $query->whereRaw('0 = 1');
                     }
-
                     $query->whereIn('id', $ids);
                 }
-
                 return $query;
             })
             ->heading(fn() => $this->selectedCenterId
@@ -93,7 +96,7 @@ class Stock extends Page implements HasTable, HasForms
                         ? CommonHelpers::getTransferStock($record->id, $this->selectedCenterId)['out']
                         : 0),
                 TextColumn::make('real_stock')
-                    ->label('المخزون الفعلي')
+                    ->label('المخزون الفعلي *قطعة')
                     ->alignCenter()
                     ->getStateUsing(fn($record) => CommonHelpers::getStock($record->id, $this->selectedCenterId))
                     ->color(fn($state, $record) => $state === 0 ? 'danger' : ($state <= $record->alert_threshold ? 'warning' : 'success')),
@@ -108,10 +111,12 @@ class Stock extends Page implements HasTable, HasForms
                     ->label('المركز')
                     ->placeholder('كل المراكز')
                     ->options(Center::all()->pluck('name', 'id'))
+                    ->disabled(!Auth::user()->can_see_all_stock)
+                    ->searchable()
+                    ->preload()
                     ->reactive(),
-
                 BooleanField::make('excludeZeros')
-                    ->label('استبعاد المنتجات بصفر كمية')
+                    ->label('استثناء الكميات صفر')
                     ->default(false)
                     ->reactive(),
             ]),

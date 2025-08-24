@@ -15,6 +15,8 @@ class PatientInfolist
             ->components([
                 ImageEntry::make('image')
                     ->label('الصورة الشخصية')
+                    ->visibility('public')
+                    ->disk('public')
                     ->imageSize(80),
                 TextEntry::make('name')
                     ->label('اسم المريض'),

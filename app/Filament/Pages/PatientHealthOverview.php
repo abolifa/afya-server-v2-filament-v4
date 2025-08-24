@@ -66,6 +66,8 @@ class PatientHealthOverview extends Page implements HasInfolists
                             ->columnSpanFull()
                             ->hiddenLabel()
                             ->alignCenter()
+                            ->visibility('public')
+                            ->disk('public')
                             ->imageSize(130)
                             ->extraAttributes([
                                 'style' => 'margin-bottom: 30px;',

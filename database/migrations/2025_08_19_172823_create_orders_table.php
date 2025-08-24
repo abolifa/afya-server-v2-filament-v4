@@ -16,6 +16,11 @@ return new class extends Migration {
             $table->foreignId('patient_id')->nullable()->constrained('patients')->nullOnDelete();
             $table->foreignId('appointment_id')->nullable()->constrained('appointments')->cascadeOnDelete();
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending')->index();
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

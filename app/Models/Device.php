@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\HasBlamesUsers;
 use Database\Factories\DeviceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Device extends Model
 {
     /** @use HasFactory<DeviceFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes, HasBlamesUsers;
 
     protected $fillable = ['name', 'manufacturer', 'model', 'serial_number', 'active'];
 

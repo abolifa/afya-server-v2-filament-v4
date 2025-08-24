@@ -16,7 +16,6 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -44,26 +43,12 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Indigo,
             ])
+            ->maxContentWidth('full')
             ->navigationGroups([
-                NavigationGroup::make('إدارة المرضى')
-                    ->icon('fas-shopping-cart')
-                    ->collapsed(false),
-                NavigationGroup::make('إدارة المخزون')
-                    ->icon('fas-box-open')
-                    ->collapsed(false),
-                NavigationGroup::make('إدارة الموارد')
-                    ->icon('fas-building')
-                    ->collapsed(false),
-                NavigationGroup::make('إدارة المشتريات')
-                    ->icon('fas-shopping-basket')
-                    ->collapsed(false),
-                NavigationGroup::make('إدارة الحسابات')
-                    ->icon('fas-users')
-                    ->collapsed(false),
             ])
             ->font('Noto Kufi Arabic')
             ->profile()
-            ->sidebarCollapsibleOnDesktop()
+            ->sidebarCollapsibleOnDesktop(false)
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('نظام عافية الطبي')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')

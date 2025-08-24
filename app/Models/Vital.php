@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use App\Traits\HasBlamesUsers;
 use Database\Factories\VitalFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vital extends Model
 {
     /** @use HasFactory<VitalFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes, HasBlamesUsers;
 
     protected $fillable = [
         'patient_id', 'doctor_id', 'recorded_at', 'weight', 'systolic', 'diastolic',

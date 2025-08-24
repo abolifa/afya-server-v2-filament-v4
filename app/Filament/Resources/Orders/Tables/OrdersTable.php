@@ -2,11 +2,16 @@
 
 namespace App\Filament\Resources\Orders\Tables;
 
+use App\Filament\Resources\Orders\OrderResource;
+use App\Support\SharedTableColumns;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class OrdersTable
@@ -53,9 +58,10 @@ class OrdersTable
                     ->getStateUsing(fn($record) => ($record->items ?? collect())->sum('quantity'))
                     ->badge()
                     ->color('primary'),
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -74,8 +80,13 @@ class OrdersTable
                         ->requiresConfirmation()
                         ->visible(fn($record) => $record->status === 'pending')
                         ->action(fn($record) => $record->update(['status' => 'cancelled'])),
+
+                    Action::make('activities')->url(fn($record) => OrderResource::getUrl('activities', ['record' => $record]))
+
                 ]),
+                RestoreAction::make(),
                 EditAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }

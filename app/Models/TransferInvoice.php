@@ -2,16 +2,18 @@
 
 namespace App\Models;
 
+use App\Traits\HasBlamesUsers;
 use Database\Factories\TransferInvoiceFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TransferInvoice extends Model
 {
     /** @use HasFactory<TransferInvoiceFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes, HasBlamesUsers;
 
     protected $fillable = ['from_center_id', 'to_center_id', 'status'];
 

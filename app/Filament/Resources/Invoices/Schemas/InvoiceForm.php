@@ -18,10 +18,10 @@ class InvoiceForm
                 Section::make([
                     Select::make('center_id')
                         ->label('المركز')
-                        ->default(auth()->user()->center_id ?? null)
                         ->relationship('center', 'name')
                         ->searchable()
                         ->preload()
+                        ->dehydrated()
                         ->required(),
                     Select::make('supplier_id')
                         ->label('المورد')
@@ -59,14 +59,14 @@ class InvoiceForm
                                 ->required()
                                 ->relationship('product', 'name')
                                 ->searchable()
-                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+//                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                 ->preload(),
                             Select::make('unit_id')
                                 ->searchable()
                                 ->options(fn() => Unit::query()
                                     ->get()
                                     ->mapWithKeys(fn($unit) => [
-                                        $unit->id => "{$unit->name} - {$unit->conversion_factor}"
+                                        $unit->id => "$unit->name - $unit->conversion_factor"
                                     ])
                                     ->toArray()
                                 )
@@ -74,16 +74,15 @@ class InvoiceForm
                                 ->required(),
                             TextInput::make('quantity')
                                 ->required()
-                                ->default(1)
-                                ->minValue(1)
-                                ->maxValue(1000)
-                                ->numeric(),
-                        ])->columns(3)
+                                ->numeric()
+                                ->minValue(1),
+                        ])->columns()
                         ->minItems(1)
                         ->validationMessages([
                             'min' => 'يجب إضافة صنف واحد على الأقل',
                         ]),
                 ])->columnSpanFull(),
+
             ]);
     }
 }

@@ -14,7 +14,7 @@
     @endonce
 
     <div class="w-full">
-        <div id="{{ $mapId }}" class="w-full rounded-md" style="height:320px;background:#fee2e2; z-index: 0"
+        <div id="{{ $mapId }}" class="w-full rounded-md h-full" style="height:350px;background:#fee2e2; z-index: 0"
              wire:ignore></div>
     </div>
 

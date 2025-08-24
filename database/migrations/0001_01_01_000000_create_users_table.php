@@ -21,7 +21,13 @@ return new class extends Migration {
             $table->boolean('doctor')->default(false);
             $table->boolean('can_see_all_stock')->default(false);
             $table->rememberToken();
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

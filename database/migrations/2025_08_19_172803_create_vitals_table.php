@@ -23,6 +23,11 @@ return new class extends Migration {
             $table->float('oxygen_saturation')->nullable();
             $table->float('sugar_level')->nullable();
             $table->text('notes')->nullable();
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

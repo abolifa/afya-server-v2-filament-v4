@@ -19,6 +19,11 @@ return new class extends Migration {
             $table->text('description')->nullable();
             $table->text('usage')->nullable();
             $table->integer('alert_threshold')->default(10);
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ use App\Models\Product;
 use App\Models\Supplier;
 use App\Models\TransferInvoice;
 use App\Models\TransferInvoiceItem;
+use App\Models\Unit;
 use App\Models\User;
 use App\Models\Vital;
 use Illuminate\Database\Seeder;
@@ -27,8 +28,9 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Create Centers
         $centers = Center::factory()->count(5)->create();
-
         $devices = Device::factory()->count(10)->create();
+
+        Unit::factory()->count(5)->create();
 
         // Helper functions to get random IDs
         $randCenter = fn() => $centers->random()->id;

@@ -15,6 +15,11 @@ return new class extends Migration {
             $table->string('name')->unique();
             $table->string('symbol')->unique();
             $table->decimal('conversion_factor', 15, 8)->default(1.0);
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

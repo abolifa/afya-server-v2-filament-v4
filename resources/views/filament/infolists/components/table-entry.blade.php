@@ -39,6 +39,7 @@
                     <th>الصنف</th>
                     <th>وحدة القياس</th>
                     <th>الكمية</th>
+                    <th>الإجمالي</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,6 +49,7 @@
                         <td>{{ $item->product->name }}</td>
                         <td>{{ $item->unit->name }}-{{ $item->unit->conversion_factor }}</td>
                         <td>{{ $item->quantity }}</td>
+                        <td>{{ $item->quantity * $item->unit->conversion_factor }}</td>
                     </tr>
                 @endforeach
                 </tbody>

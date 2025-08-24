@@ -27,6 +27,11 @@ return new class extends Migration {
             $table->foreignId('center_id')->nullable()->constrained('centers')->nullOnDelete();
             $table->foreignId('device_id')->nullable()->constrained('devices')->nullOnDelete();
             $table->rememberToken();
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

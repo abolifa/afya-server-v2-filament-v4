@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\Traits\HasBlamesUsers;
 use Database\Factories\CenterFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @method static find(mixed $param)
@@ -13,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Center extends Model
 {
     /** @use HasFactory<CenterFactory> */
-    use HasFactory;
+    use HasFactory, SoftDeletes, HasBlamesUsers;
 
 
     protected $fillable = [

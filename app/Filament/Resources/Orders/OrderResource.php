@@ -56,6 +56,7 @@ class OrderResource extends Resource
             'index' => ListOrders::route('/'),
             'create' => CreateOrder::route('/create'),
             'view' => ViewOrder::route('/{record}'),
+            'activities' => Pages\ListOrderActivities::route('/{record}/activities'),
             'edit' => EditOrder::route('/{record}/edit'),
         ];
     }

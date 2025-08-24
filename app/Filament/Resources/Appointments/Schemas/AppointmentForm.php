@@ -3,8 +3,11 @@
 namespace App\Filament\Resources\Appointments\Schemas;
 
 use App\Filament\Forms\Components\BooleanField;
+use App\Helpers\CommonHelpers;
 use App\Models\Device;
 use App\Models\Patient;
+use App\Models\Product;
+use App\Models\Unit;
 use Carbon\Carbon;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Repeater;
@@ -120,10 +123,13 @@ class AppointmentForm
                         ->label('عناصر الطلب')
                         ->table([
                             Repeater\TableColumn::make('العنصر')
-                                ->width('50%')
+                                ->width('33.33%')
+                                ->alignCenter(),
+                            Repeater\TableColumn::make('وحدة القياس')
+                                ->width('33.33%')
                                 ->alignCenter(),
                             Repeater\TableColumn::make('الكمية')
-                                ->width('50%')
+                                ->width('33.33%')
                                 ->alignCenter(),
                         ])
                         ->schema([
@@ -132,11 +138,52 @@ class AppointmentForm
                                 ->searchable()
                                 ->preload()
                                 ->required(),
+                            Select::make('unit_id')
+                                ->searchable()
+                                ->options(fn() => Unit::query()
+                                    ->get()
+                                    ->mapWithKeys(fn($unit) => [
+                                        $unit->id => "{$unit->name} - {$unit->conversion_factor}"
+                                    ])
+                                    ->toArray()
+                                )
+                                ->preload()
+                                ->required(),
                             TextInput::make('quantity')
-                                ->numeric()
+                                ->required()
                                 ->default(1)
                                 ->minValue(1)
-                                ->required(),
+                                ->maxValue(1000)
+                                ->rules(function ($get, $context, $record) {
+                                    $productId = $get('product_id');
+                                    $centerId = $get('../../center_id') ?? auth()->user()?->center_id;
+
+                                    if (!$productId) {
+                                        return ['required', 'numeric', 'min:1'];
+                                    }
+
+                                    $product = Product::find($productId);
+                                    if (!$product) {
+                                        return ['required', 'numeric', 'min:1'];
+                                    }
+
+                                    $availableStock = CommonHelpers::getStock($product->id, $centerId);
+
+                                    if ($context === 'edit' && $record && $record->exists) {
+                                        $availableStock += $record->quantity;
+                                    }
+
+                                    return [
+                                        'required',
+                                        'numeric',
+                                        'min:1',
+                                        'max:' . $availableStock,
+                                    ];
+                                })
+                                ->validationMessages([
+                                    'max' => 'الكمية تتجاوز المخزون المتاح في المركز.',
+                                ])
+                                ->numeric(),
                         ])
                         ->columns()
                         ->columnSpanFull(),

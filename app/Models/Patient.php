@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Traits\HasBlamesUsers;
 use Database\Factories\PatientFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static find(string|null $state)
@@ -15,12 +18,22 @@ use Illuminate\Notifications\Notifiable;
 class Patient extends Authenticatable
 {
     /** @use HasFactory<PatientFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes, HasBlamesUsers, HasApiTokens;
 
     protected $fillable = [
         'file_number', 'national_id', 'family_issue_number', 'name', 'phone',
         'password', 'email', 'gender', 'dob', 'blood_group', 'image', 'verified',
         'center_id', 'device_id',
+    ];
+
+    protected $hidden = [
+        'password', 'remember_token',
+    ];
+
+    protected $casts = [
+        'dob' => 'datetime',
+        'verified' => 'boolean',
+        'password' => 'hashed',
     ];
 
     public function center(): BelongsTo

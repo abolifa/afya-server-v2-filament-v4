@@ -15,6 +15,11 @@ return new class extends Migration {
             $table->foreignId('center_id')->constrained('centers')->cascadeOnDelete();
             $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->nullOnDelete();
             $table->enum('status', ['pending', 'confirmed', 'cancelled'])->default('pending')->index();
+
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

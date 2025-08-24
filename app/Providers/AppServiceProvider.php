@@ -2,9 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\Appointment;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Prescription;
 use App\Models\TransferInvoice;
+use App\Observers\AppointmentObserver;
+use App\Observers\OrderObserver;
+use App\Observers\PrescriptionObserver;
 use App\Observers\StockMovementObserver;
 use Filament\Support\Colors\Color;
 use Filament\Support\Facades\FilamentColor;
@@ -36,6 +41,8 @@ class AppServiceProvider extends ServiceProvider
     {
         Invoice::observe(StockMovementObserver::class);
         TransferInvoice::observe(StockMovementObserver::class);
-        Order::observe(StockMovementObserver::class);
+        Order::observe(OrderObserver::class);
+        Appointment::observe(AppointmentObserver::class);
+        Prescription::observe(PrescriptionObserver::class);
     }
 }

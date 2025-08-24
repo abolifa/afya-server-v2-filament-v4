@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources\Products\Tables;
 
+use App\Support\SharedTableColumns;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class ProductsTable
@@ -65,13 +69,17 @@ class ProductsTable
                     ->placeholder('-')
                     ->alignCenter()
                     ->sortable(),
+
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
+                RestoreAction::make(),
                 EditAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Filament\Resources\TransferInvoices\Tables;
 
+use App\Support\SharedTableColumns;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class TransferInvoicesTable
@@ -48,9 +52,10 @@ class TransferInvoicesTable
                     ->getStateUsing(fn($record) => ($record->items ?? collect())->sum('quantity'))
                     ->badge()
                     ->color('primary'),
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -70,7 +75,9 @@ class TransferInvoicesTable
                         ->visible(fn($record) => $record->status === 'pending')
                         ->action(fn($record) => $record->update(['status' => 'cancelled'])),
                 ]),
+                RestoreAction::make(),
                 EditAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }

@@ -2,9 +2,13 @@
 
 namespace App\Filament\Resources\Suppliers\Tables;
 
+use App\Support\SharedTableColumns;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class SuppliersTable
@@ -34,13 +38,16 @@ class SuppliersTable
                     ->alignCenter()
                     ->limit(50)
                     ->searchable(),
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
+                RestoreAction::make(),
                 EditAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }

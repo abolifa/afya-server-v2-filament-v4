@@ -43,8 +43,6 @@ class OrderInfolist
                         ->dateTime(),
                 ])->columnSpanFull()
                     ->columns(3),
-
-
                 Section::make([
                     TableEntry::make('items')
                         ->label('الأصناف'),

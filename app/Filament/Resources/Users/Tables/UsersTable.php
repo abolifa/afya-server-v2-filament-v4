@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Support\SharedTableColumns;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class UsersTable
@@ -46,13 +50,16 @@ class UsersTable
                     ->label('كل المخزون')
                     ->alignCenter()
                     ->boolean(),
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
+                RestoreAction::make(),
                 EditAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }

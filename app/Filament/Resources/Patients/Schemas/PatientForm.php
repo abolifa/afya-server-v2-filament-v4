@@ -24,6 +24,8 @@ class PatientForm
                         ->alignCenter()
                         ->avatar()
                         ->label('الصورة الشخصية')
+                        ->visibility('public')
+                        ->disk('public')
                         ->image(),
                     TextInput::make('name')
                         ->label('الإسم')

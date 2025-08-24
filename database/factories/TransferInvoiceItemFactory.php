@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Product;
 use App\Models\TransferInvoice;
 use App\Models\TransferInvoiceItem;
+use App\Models\Unit;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -22,6 +23,7 @@ class TransferInvoiceItemFactory extends Factory
         return [
             'transfer_invoice_id' => TransferInvoice::factory(),
             'product_id' => Product::factory(),
+            'unit_id' => fake()->randomElement(array: Unit::all()->pluck('id')->toArray()),
             'quantity' => $this->faker->numberBetween(1, 15),
         ];
     }

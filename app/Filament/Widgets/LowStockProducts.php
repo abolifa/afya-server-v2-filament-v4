@@ -3,7 +3,6 @@
 namespace App\Filament\Widgets;
 
 use App\Models\Product;
-use Filament\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -54,15 +53,6 @@ class LowStockProducts extends BaseWidget
                         : ($state <= $record->alert_threshold ? 'warning' : 'success')),
 
 
-            ])
-            ->headerActions([
-                Action::make('viewAll')
-                    ->label('عرض الكل')
-                    ->url(route('filament.admin.pages.low-stock-product-page'))
-                    ->icon('fas-list')
-                    ->button()
-                    ->size('sm')
-                    ->color('secondary'),
             ])
             ->defaultSort('stock')
             ->paginated(false);

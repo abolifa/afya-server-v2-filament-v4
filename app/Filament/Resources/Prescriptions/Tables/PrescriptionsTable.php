@@ -2,12 +2,16 @@
 
 namespace App\Filament\Resources\Prescriptions\Tables;
 
+use App\Support\SharedTableColumns;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class PrescriptionsTable
@@ -43,9 +47,10 @@ class PrescriptionsTable
                     ->tooltip(fn($record) => $record->dispensed_date)
                     ->alignCenter()
                     ->sortable(),
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ActionGroup::make([
@@ -58,7 +63,9 @@ class PrescriptionsTable
                         ->color('success')
                         ->visible(fn($record) => !$record->dispensed),
                 ]),
+                RestoreAction::make(),
                 EditAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }

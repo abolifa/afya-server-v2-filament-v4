@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources\Devices\Tables;
 
+use App\Support\SharedTableColumns;
 use Filament\Actions\EditAction;
+use Filament\Actions\ForceDeleteAction;
+use Filament\Actions\RestoreAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 
 class DevicesTable
@@ -53,13 +57,16 @@ class DevicesTable
                         return "{$hours}س {$minutes}د";
                     })
                     ->alignCenter(),
+                ...SharedTableColumns::blame(),
             ])
             ->filters([
-                //
+                TrashedFilter::make(),
             ])
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                RestoreAction::make(),
+                ForceDeleteAction::make(),
             ]);
     }
 }
