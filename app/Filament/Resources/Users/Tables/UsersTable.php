@@ -36,6 +36,12 @@ class UsersTable
                     ->alignCenter()
                     ->sortable()
                     ->searchable(),
+                TextColumn::make('roles.name')
+                    ->label('الصلاحيات')
+                    ->alignCenter()
+                    ->sortable()
+                    ->searchable()
+                    ->badge(),
                 IconColumn::make('active')
                     ->label('نشط')
                     ->alignCenter()
