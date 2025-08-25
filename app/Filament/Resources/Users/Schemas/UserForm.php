@@ -26,8 +26,9 @@ class UserForm
                     ->tel(),
                 TextInput::make('password')
                     ->label('كلمة المرور')
-                    ->password()
-                    ->required(),
+                    ->required(fn($operation) => $operation === 'create')
+                    ->disabled(fn($operation) => $operation === 'edit')
+                    ->password(),
                 Select::make('center_id')
                     ->label('المركز')
                     ->required()
@@ -37,10 +38,10 @@ class UserForm
                 Select::make('roles')
                     ->label('الصلاحيات')
                     ->relationship('roles', 'name')
-                    ->multiple(false)
+                    ->multiple()
                     ->preload()
-                    ->required()
                     ->searchable(),
+
                 Group::make([
                     BooleanField::make('active'),
                     BooleanField::make('doctor')
