@@ -42,9 +42,8 @@ class PatientHealthOverview extends Page implements HasInfolists
                 ->requiresConfirmation(false),
             Action::make('print')
                 ->label('طباعة')
-                ->icon('heroicon-o-printer')
-                ->color('primary')
                 ->url(route('print.patient-overview', ['patient' => $this->patient->id]))
+                ->icon('heroicon-o-printer')
                 ->openUrlInNewTab()
                 ->requiresConfirmation(false),
 

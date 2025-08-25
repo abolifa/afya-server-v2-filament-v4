@@ -6,7 +6,7 @@ use App\Models\Patient;
 use Illuminate\View\View;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
-class PateintPrintController extends Controller
+class PateintPrintController
 {
     public function print(Patient $patient): View
     {

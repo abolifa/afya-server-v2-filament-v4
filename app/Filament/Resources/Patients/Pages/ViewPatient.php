@@ -17,8 +17,9 @@ class ViewPatient extends ViewRecord
         return [
             Action::make('view')
                 ->label('كشف مريض')
-                ->url(fn(Patient $record): string => '/admin/patients/' . $record->id . '/overview')
-                ->icon('fas-list'),
+                ->button()
+                ->color('warning')
+                ->url(fn(Patient $record): string => '/admin/patients/' . $record->id . '/overview'),
             EditAction::make(),
         ];
     }

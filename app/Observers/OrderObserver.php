@@ -68,6 +68,7 @@ class OrderObserver
             foreach ($order->items as $item) {
                 $movement->items()->create([
                     'product_id' => $item->product_id,
+                    'unit_id' => $item->unit_id,
                     'quantity' => $item->quantity,
                 ]);
             }

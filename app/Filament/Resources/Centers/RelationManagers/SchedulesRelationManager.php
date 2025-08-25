@@ -23,6 +23,7 @@ class SchedulesRelationManager extends RelationManager
 
     protected static ?string $label = 'يوم';
     protected static ?string $title = 'جدول العمل';
+    protected static ?string $pluralLabel = 'أيام';
 
     public function form(Schema $schema): Schema
     {
