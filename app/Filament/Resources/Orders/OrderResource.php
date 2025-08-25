@@ -27,7 +27,6 @@ class OrderResource extends Resource
 
     protected static string|null|UnitEnum $navigationGroup = 'إدارة المرضى';
 
-
     public static function form(Schema $schema): Schema
     {
         return OrderForm::configure($schema);

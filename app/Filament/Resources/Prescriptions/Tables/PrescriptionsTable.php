@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Prescriptions\Tables;
 
+use App\Filament\Resources\Prescriptions\PrescriptionResource;
 use App\Support\SharedTableColumns;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -13,6 +14,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class PrescriptionsTable
 {
@@ -62,6 +64,12 @@ class PrescriptionsTable
                         ->requiresConfirmation()
                         ->color('success')
                         ->visible(fn($record) => !$record->dispensed),
+
+                    Action::make('activities')
+                        ->url(fn($record) => PrescriptionResource::getUrl('activities', ['record' => $record]))
+                        ->label('الأنشطة')
+                        ->visible(Auth::user()->whiteList && Auth::user()->whiteList->can_see_activities)
+                        ->icon('lucide-activity-square'),
                 ]),
                 RestoreAction::make(),
                 EditAction::make(),

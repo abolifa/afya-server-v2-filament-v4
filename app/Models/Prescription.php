@@ -9,14 +9,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Prescription extends Model
 {
     /** @use HasFactory<PrescriptionFactory> */
-    use HasFactory, SoftDeletes, HasBlamesUsers;
+    use HasFactory, SoftDeletes, HasBlamesUsers, LogsActivity;
 
     protected $fillable = ['patient_id', 'doctor_id', 'center_id', 'appointment_id', 'date',
         'notes', 'dispensed', 'dispensed_at'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('prescriptions')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function patient(): BelongsTo
     {

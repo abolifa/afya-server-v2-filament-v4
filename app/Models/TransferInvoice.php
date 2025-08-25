@@ -9,13 +9,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class TransferInvoice extends Model
 {
     /** @use HasFactory<TransferInvoiceFactory> */
-    use HasFactory, SoftDeletes, HasBlamesUsers;
+    use HasFactory, SoftDeletes, HasBlamesUsers, LogsActivity;
 
     protected $fillable = ['from_center_id', 'to_center_id', 'status'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('transfer_invoices')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function fromCenter(): BelongsTo
     {

@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Users\Schemas;
 use App\Filament\Forms\Components\BooleanField;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
 
 class UserForm
@@ -29,14 +30,23 @@ class UserForm
                     ->required(),
                 Select::make('center_id')
                     ->label('المركز')
+                    ->required()
+                    ->searchable()
+                    ->preload()
                     ->relationship('center', 'name'),
-                BooleanField::make('active'),
-                BooleanField::make('doctor')
-                    ->label('طبيب')
-                    ->default(false),
-                BooleanField::make('can_see_all_stock')
-                    ->label('يمكنه رؤية كل المخزون')
-                    ->default(false),
+                Select::make('roles')
+                    ->label('الصلاحيات')
+                    ->relationship('roles', 'name')
+                    ->multiple(false)
+                    ->preload()
+                    ->required()
+                    ->searchable(),
+                Group::make([
+                    BooleanField::make('active'),
+                    BooleanField::make('doctor')
+                        ->label('طبيب')
+                        ->default(false),
+                ])->columns(),
             ]);
     }
 }

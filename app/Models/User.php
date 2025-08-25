@@ -10,6 +10,7 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,7 +34,6 @@ class User extends Authenticatable implements FilamentUser
         'active',
         'doctor',
         'password',
-        'can_see_all_stock',
     ];
 
     /**
@@ -71,6 +71,11 @@ class User extends Authenticatable implements FilamentUser
         return $this->active;
     }
 
+    public function whiteList(): HasOne
+    {
+        return $this->hasOne(WhiteList::class, 'user_id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -82,7 +87,6 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'active' => 'boolean',
             'doctor' => 'boolean',
-            'can_see_all_stock' => 'boolean',
         ];
     }
 

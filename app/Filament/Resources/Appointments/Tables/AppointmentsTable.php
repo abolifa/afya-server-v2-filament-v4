@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Appointments\Tables;
 
+use App\Filament\Resources\Appointments\AppointmentResource;
 use App\Support\SharedTableColumns;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
@@ -16,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class AppointmentsTable
 {
@@ -190,6 +192,13 @@ class AppointmentsTable
                             ]);
                         })
                         ->visible(fn($record) => $record->status !== 'completed'),
+
+
+                    Action::make('activities')
+                        ->url(fn($record) => AppointmentResource::getUrl('activities', ['record' => $record]))
+                        ->label('الأنشطة')
+                        ->visible(Auth::user()->whiteList && Auth::user()->whiteList->can_see_activities)
+                        ->icon('lucide-activity-square'),
                 ]),
 
                 RestoreAction::make(),

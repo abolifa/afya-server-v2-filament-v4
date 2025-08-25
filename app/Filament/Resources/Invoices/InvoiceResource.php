@@ -55,6 +55,7 @@ class InvoiceResource extends Resource
             'index' => ListInvoices::route('/'),
             'create' => CreateInvoice::route('/create'),
             'view' => ViewInvoice::route('/{record}'),
+            'activities' => Pages\ListInvoiceActivities::route('/{record}/activities'),
             'edit' => EditInvoice::route('/{record}/edit'),
         ];
     }

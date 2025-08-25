@@ -46,10 +46,6 @@ class UsersTable
                     ->sortable()
                     ->alignCenter()
                     ->boolean(),
-                IconColumn::make('can_see_all_stock')
-                    ->label('كل المخزون')
-                    ->alignCenter()
-                    ->boolean(),
                 ...SharedTableColumns::blame(),
             ])
             ->filters([

@@ -55,6 +55,7 @@ class AppointmentResource extends Resource
             'index' => ListAppointments::route('/'),
             'create' => CreateAppointment::route('/create'),
             'view' => ViewAppointment::route('/{record}'),
+            'activities' => Pages\ListAppointmentActivities::route('/{record}/activities'),
             'edit' => EditAppointment::route('/{record}/edit'),
         ];
     }

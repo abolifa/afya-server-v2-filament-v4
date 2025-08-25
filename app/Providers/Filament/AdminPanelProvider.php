@@ -43,7 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Indigo,
             ])
-            ->maxContentWidth('full')
+            ->maxContentWidth('7xl')
             ->navigationGroups([
             ])
             ->font('Noto Kufi Arabic')

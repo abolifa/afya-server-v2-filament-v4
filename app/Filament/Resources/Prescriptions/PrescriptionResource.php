@@ -56,6 +56,7 @@ class PrescriptionResource extends Resource
             'index' => ListPrescriptions::route('/'),
             'create' => CreatePrescription::route('/create'),
             'view' => ViewPrescription::route('/{record}'),
+            'activities' => Pages\ListPrescriptionActivities::route('/{record}/activities'),
             'edit' => EditPrescription::route('/{record}/edit'),
         ];
     }

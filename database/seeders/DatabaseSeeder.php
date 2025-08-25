@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
 
         Unit::factory()->count(5)->create();
 
-        // Helper functions to get random IDs
+        // Helper functions to get random IDsw
         $randCenter = fn() => $centers->random()->id;
         $randDevice = fn() => $devices->random()->id;
 

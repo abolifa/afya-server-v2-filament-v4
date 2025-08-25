@@ -9,20 +9,29 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Appointment extends Model
 {
     /** @use HasFactory<AppointmentFactory> */
-    use HasFactory, SoftDeletes, HasBlamesUsers;
+    use HasFactory, SoftDeletes, HasBlamesUsers, LogsActivity;
 
     protected $fillable = [
         'center_id', 'patient_id', 'doctor_id', 'device_id',
         'date', 'time', 'status', 'intended', 'notes', 'start_time', 'end_time',
         'ordered'
     ];
-
-
     protected $appends = ['total_hours'];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('appointments')
+            ->logFillable()
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function center(): BelongsTo
     {

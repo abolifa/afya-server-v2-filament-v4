@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources\Patients\Tables;
 
+use App\Filament\Resources\Patients\PatientResource;
 use App\Support\SharedTableColumns;
+use Filament\Actions\Action;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
@@ -12,6 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class PatientsTable
 {
@@ -114,6 +117,11 @@ class PatientsTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
+                Action::make('activities')
+                    ->url(fn($record) => PatientResource::getUrl('activities', ['record' => $record]))
+                    ->label('الأنشطة')
+                    ->visible(Auth::user()->whiteList && Auth::user()->whiteList->can_see_activities)
+                    ->icon('lucide-activity-square'),
                 ViewAction::make(),
                 RestoreAction::make(),
                 EditAction::make(),

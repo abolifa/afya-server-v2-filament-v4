@@ -38,10 +38,10 @@ class OrderForm
                         ->reactive()
                         ->searchable()
                         ->preload()
+                        ->dehydrated(false)
+                        ->default(Auth::user()->center_id)
+                        ->disabled(Auth::user()->can('select_any_orders::order'))
                         ->relationship('center', 'name')
-                        ->default(auth()->user()->center_id ?? null)
-                        ->disabled(!Auth::user()->can_see_all_stock)
-                        ->dehydrated()
                         ->helperText(function ($state, Get $get) {
                             $patient = Patient::find($get('patient_id'));
                             if (!$patient) {

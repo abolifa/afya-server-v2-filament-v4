@@ -19,7 +19,6 @@ return new class extends Migration {
             $table->foreignId('center_id')->nullable()->constrained('centers')->nullOnDelete();
             $table->boolean('active')->default(true);
             $table->boolean('doctor')->default(false);
-            $table->boolean('can_see_all_stock')->default(false);
             $table->rememberToken();
 
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();

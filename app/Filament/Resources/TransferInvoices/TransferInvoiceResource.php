@@ -55,6 +55,7 @@ class TransferInvoiceResource extends Resource
             'index' => ListTransferInvoices::route('/'),
             'create' => CreateTransferInvoice::route('/create'),
             'view' => ViewTransferInvoice::route('/{record}'),
+            'activities' => Pages\ListTransferInvoicesActivities::route('/{record}/activities'),
             'edit' => EditTransferInvoice::route('/{record}/edit'),
         ];
     }

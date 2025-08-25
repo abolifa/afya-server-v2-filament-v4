@@ -13,6 +13,7 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Auth;
 
 class OrdersTable
 {
@@ -81,7 +82,11 @@ class OrdersTable
                         ->visible(fn($record) => $record->status === 'pending')
                         ->action(fn($record) => $record->update(['status' => 'cancelled'])),
 
-                    Action::make('activities')->url(fn($record) => OrderResource::getUrl('activities', ['record' => $record]))
+                    Action::make('activities')
+                        ->url(fn($record) => OrderResource::getUrl('activities', ['record' => $record]))
+                        ->label('الأنشطة')
+                        ->visible(Auth::user()->whiteList && Auth::user()->whiteList->can_see_activities)
+                        ->icon('lucide-activity-square'),
 
                 ]),
                 RestoreAction::make(),

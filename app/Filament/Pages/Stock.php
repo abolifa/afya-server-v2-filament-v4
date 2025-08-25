@@ -29,19 +29,32 @@ class Stock extends Page implements HasTable, HasForms
     protected static string|null|BackedEnum $navigationIcon = 'fas-warehouse';
     protected static ?string $navigationLabel = 'المخزن';
     protected static ?string $title = 'المخزن';
-
     protected static string|null|UnitEnum $navigationGroup = 'إدارة المخزون';
+
     public bool $excludeZeros = false;
     public ?int $selectedCenterId = null;
+    public bool $canChangeCenter = false;
 
     protected string $view = 'filament.pages.stock';
 
     public function mount(): void
     {
-        if (!Auth::user()->can_see_all_stock && is_null(Auth::user()->center_id)) {
-            abort(403, 'لا يمكنك عرض المخزون.');
+        $user = Auth::user();
+        $whiteList = $user->whiteList;
+
+        if ($whiteList && $whiteList->can_see_all_stock) {
+            // يقدر يشوف كل المراكز
+            $this->canChangeCenter = true;
+            $this->selectedCenterId = $user->center_id; // يبدأ بمركزه لو عنده
+        } else {
+            // ما يقدر يشوف إلا مركزه
+            if ($user->center_id) {
+                $this->selectedCenterId = $user->center_id;
+                $this->canChangeCenter = false;
+            } else {
+                abort(403, 'لا يمكن عرض المخزون');
+            }
         }
-        $this->selectedCenterId = Auth::user()->center_id;
     }
 
     public function table(Table $table): Table
@@ -49,15 +62,19 @@ class Stock extends Page implements HasTable, HasForms
         return $table
             ->query(function () {
                 $query = Product::query();
+
                 if ($this->excludeZeros) {
                     $ids = $query->get()
                         ->filter(fn($product) => CommonHelpers::getStock($product->id, $this->selectedCenterId) > 0)
                         ->pluck('id');
+
                     if ($ids->isEmpty()) {
                         return $query->whereRaw('0 = 1');
                     }
+
                     $query->whereIn('id', $ids);
                 }
+
                 return $query;
             })
             ->heading(fn() => $this->selectedCenterId
@@ -106,20 +123,21 @@ class Stock extends Page implements HasTable, HasForms
     protected function getFormSchema(): array
     {
         return [
-            Fieldset::make('خيارات العرض')->columns()->schema([
+            Fieldset::make('خيارات العرض')->schema([
                 Select::make('selectedCenterId')
                     ->label('المركز')
                     ->placeholder('كل المراكز')
                     ->options(Center::all()->pluck('name', 'id'))
-                    ->disabled(!Auth::user()->can_see_all_stock)
                     ->searchable()
                     ->preload()
+                    ->disabled(fn() => !$this->canChangeCenter)
                     ->reactive(),
+                // رجّعت excludeZeros زي ما كان
                 BooleanField::make('excludeZeros')
                     ->label('استثناء الكميات صفر')
                     ->default(false)
                     ->reactive(),
-            ]),
+            ])->columns(),
         ];
     }
 }
