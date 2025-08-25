@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Models\User;
 use App\Support\SharedTableColumns;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteAction;
@@ -18,6 +19,7 @@ class UsersTable
     {
         return $table
             ->defaultSort('created_at', 'desc')
+            ->query(User::query()->whereNot('id', 1))
             ->columns([
                 TextColumn::make('name')
                     ->label('الإسم')

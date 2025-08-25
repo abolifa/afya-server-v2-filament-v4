@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Schema;
+use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -37,10 +38,15 @@ class UserForm
                     ->relationship('center', 'name'),
                 Select::make('roles')
                     ->label('الصلاحيات')
-                    ->relationship('roles', 'name')
                     ->multiple()
+                    ->relationship('roles', 'name')
+                    ->searchable()
                     ->preload()
-                    ->searchable(),
+                    ->options(
+                        Role::query()
+                            ->where('name', '!=', config('filament-shield.super_admin.name', 'super_admin'))
+                            ->pluck('name', 'id')
+                    ),
 
                 Group::make([
                     BooleanField::make('active'),
