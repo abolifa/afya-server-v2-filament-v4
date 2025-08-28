@@ -4,7 +4,7 @@ use App\Http\Controllers\PateintPrintController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return redirect('/admin');
+    return view('/gate');
 });
 
 Route::get('/patients/{patient}/print', [PateintPrintController::class, 'print'])

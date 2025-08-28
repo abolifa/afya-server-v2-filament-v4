@@ -62,7 +62,6 @@ class Stock extends Page implements HasTable, HasForms
         return $table
             ->query(function () {
                 $query = Product::query();
-
                 if ($this->excludeZeros) {
                     $ids = $query->get()
                         ->filter(fn($product) => CommonHelpers::getStock($product->id, $this->selectedCenterId) > 0)
