@@ -79,7 +79,8 @@ class PatientForm
                     TextInput::make('password')
                         ->label('كلمة المرور')
                         ->password()
-                        ->required(),
+                        ->disabledOn('edit')
+                        ->required(fn(string $context) => $context === 'create'),
                     Select::make('center_id')
                         ->label('المركز')
                         ->required()

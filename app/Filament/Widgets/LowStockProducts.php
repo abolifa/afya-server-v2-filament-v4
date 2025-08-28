@@ -23,9 +23,7 @@ class LowStockProducts extends BaseWidget
             ->emptyStateHeading('لا توجد أصناف')
             ->columns([
                 TextColumn::make('name')
-                    ->label('المنتج')
-                    ->limit(28),
-
+                    ->label('المنتج'),
                 TextColumn::make('type')
                     ->label('النوع')
                     ->alignCenter()
@@ -43,19 +41,14 @@ class LowStockProducts extends BaseWidget
                         'other' => 'danger',
                     })
                     ->badge(),
-
-
                 TextColumn::make('stock')
                     ->label('المخزون')
                     ->alignCenter()
                     ->color(fn($state, $record) => $state <= 0
                         ? 'danger'
                         : ($state <= $record->alert_threshold ? 'warning' : 'success')),
-
-
             ])
-            ->defaultSort('stock')
-            ->paginated(false);
+            ->defaultSort('stock');
     }
 
     protected function query(): Builder
@@ -102,7 +95,6 @@ class LowStockProducts extends BaseWidget
                 ) AS stock
             ")
             ->havingRaw('stock <= alert_threshold')
-            ->orderBy('stock')
-            ->limit(10);
+            ->orderBy('stock');
     }
 }

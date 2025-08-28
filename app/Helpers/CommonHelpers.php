@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Models\Center;
 use App\Models\Invoice;
 use App\Models\InvoiceItem;
 use App\Models\Order;
@@ -9,6 +10,7 @@ use App\Models\OrderItem;
 use App\Models\TransferInvoice;
 use App\Models\TransferInvoiceItem;
 use App\Models\Unit;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
@@ -96,7 +98,6 @@ class CommonHelpers
         return (int)round($invoicePieces + $transferInPieces - $transferOutPieces - $orderPieces);
     }
 
-    // ... checkCenterSchedule unchanged ...
 
     /**
      * Apply "all except cancelled" on a model that has a status column.
@@ -222,5 +223,27 @@ class CommonHelpers
             ->sum(DB::raw('transfer_invoice_items.quantity * COALESCE(units.conversion_factor, 1)'));
 
         return ['in' => (int)round($in), 'out' => (int)round($out)];
+    }
+
+
+    public static function checkCenterSchedule(?Center $center, $date, $time): bool
+    {
+        if (!$center || !$date || !$time) {
+            return false;
+        }
+        $carbonDate = $date instanceof Carbon ? $date : Carbon::parse($date);
+        $carbonTime = $time instanceof Carbon ? $time : Carbon::parse($time);
+        $dayOfWeek = strtolower($carbonDate->englishDayOfWeek);
+        $schedule = $center->schedules()
+            ->where('day', $dayOfWeek)
+            ->where('is_active', true)
+            ->first();
+        if (!$schedule) {
+            return false;
+        }
+        $start = Carbon::parse($schedule->start_time);
+        $end = Carbon::parse($schedule->end_time);
+
+        return $carbonTime->between($start, $end);
     }
 }

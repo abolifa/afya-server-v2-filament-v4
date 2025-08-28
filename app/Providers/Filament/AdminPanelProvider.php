@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Widgets\ExpiredProducts;
 use App\Filament\Widgets\LatestOrders;
 use App\Filament\Widgets\LatestPendingAppointments;
 use App\Filament\Widgets\LowStockProducts;
@@ -60,6 +61,7 @@ class AdminPanelProvider extends PanelProvider
                 TopUsedProducts::class,
                 TopAppointmentPerCenter::class,
                 LowStockProducts::class,
+                ExpiredProducts::class,
                 TopCentersOrders::class,
                 TopUsedDevices::class,
                 LatestOrders::class,
