@@ -93,4 +93,14 @@ class Center extends Model
     {
         return $this->hasMany(StockMovement::class, 'to_center_id');
     }
+
+    public function receivedLetters(): HasMany
+    {
+        return $this->hasMany(Letter::class, 'to_center_id');
+    }
+
+    public function sentDocuments(): HasMany
+    {
+        return $this->hasMany(Document::class, 'from_center_id');
+    }
 }

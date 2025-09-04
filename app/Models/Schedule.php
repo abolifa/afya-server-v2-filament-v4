@@ -16,6 +16,10 @@ class Schedule extends Model
 
     protected $fillable = ['center_id', 'day', 'start_time', 'end_time', 'is_active'];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
     public function center(): BelongsTo
     {
         return $this->belongsTo(Center::class);

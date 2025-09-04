@@ -3,17 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Patient;
-use Illuminate\View\View;
-use niklasravnsborg\LaravelPdf\Facades\Pdf;
+use Illuminate\Support\Facades\View;
+use Mpdf\Mpdf;
 
 class PateintPrintController
 {
-    public function print(Patient $patient): View
+    public function print(Patient $patient)
     {
         $data = [
             'patient' => $patient,
         ];
-
+        $html = View::make('print.patient-overview', $data)->render();
         $config = [
             'format' => 'A4',
             'orientation' => 'P',
@@ -26,9 +26,9 @@ class PateintPrintController
             'autoLangToFont' => true,
             'dpi' => 100,
         ];
-
-        $pdf = PDF::loadView('print.patient-overview', $data, [], $config);
-
-        return $pdf->stream('print.patient-overview');
+        $mpdf = new Mpdf($config);
+        $mpdf->WriteHTML($html);
+        return response($mpdf->Output('patient-overview.pdf', 'I'))
+            ->header('Content-Type', 'application/pdf');
     }
 }

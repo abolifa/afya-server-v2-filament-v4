@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Responses\LogoutResponse;
 use App\Models\Appointment;
 use App\Models\Invoice;
 use App\Models\Order;
@@ -17,6 +18,10 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
+    public $singletons = [
+        \Filament\Auth\Http\Responses\Contracts\LogoutResponse::class => LogoutResponse::class,
+    ];
+
     /**
      * Register any application services.
      */

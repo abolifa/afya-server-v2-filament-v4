@@ -24,6 +24,12 @@ class Appointment extends Model
     ];
     protected $appends = ['total_hours'];
 
+    protected $casts = [
+        'date' => 'date',
+        'intended' => 'boolean',
+        'ordered' => 'boolean',
+    ];
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()

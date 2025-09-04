@@ -34,7 +34,7 @@ class CenterController
 
     public function getCenters(Request $request): JsonResponse
     {
-        $centers = Center::query()->select('id', 'name', 'phone', 'email')->get();
+        $centers = Center::query()->select('id', 'name', 'phone', 'email', 'city', 'address')->get();
         return response()->json($centers);
     }
 

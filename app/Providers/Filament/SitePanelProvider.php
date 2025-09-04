@@ -32,6 +32,7 @@ class SitePanelProvider extends PanelProvider
             ])
             ->profile()
             ->login()
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Site/Resources'), for: 'App\Filament\Site\Resources')
             ->discoverPages(in: app_path('Filament/Site/Pages'), for: 'App\Filament\Site\Pages')
             ->pages([

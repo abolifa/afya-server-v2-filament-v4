@@ -13,6 +13,7 @@ use App\Filament\Widgets\TopUsedDevices;
 use App\Filament\Widgets\TopUsedProducts;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Exception;
+use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -48,6 +49,12 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
             ])
             ->font('Noto Kufi Arabic')
+            ->userMenuItems([
+                Action::make('change')
+                    ->label('ذهاب للرئيسية')
+                    ->icon('heroicon-o-home')
+                    ->url('/'),
+            ])
             ->profile()
             ->sidebarCollapsibleOnDesktop(false)
             ->brandName('نظام عافية الصحي')
@@ -65,7 +72,6 @@ class AdminPanelProvider extends PanelProvider
                 TopCentersOrders::class,
                 TopUsedDevices::class,
                 LatestOrders::class,
-
             ])
             ->middleware([
                 EncryptCookies::class,

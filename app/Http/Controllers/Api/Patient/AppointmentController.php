@@ -14,8 +14,7 @@ class AppointmentController
         $patient = $request->user();
         $appointments = $patient
             ->appointments()
-            ->with(['center', 'doctor'])
-            ->withoutGlobalScope(ByCenterScope::class)
+            ->with('center', 'doctor')
             ->orderBy('date', 'desc')
             ->paginate(10);
         return response()->json($appointments);
@@ -26,7 +25,6 @@ class AppointmentController
         $patient = $request->user();
         $appointments = $patient
             ->appointments()
-            ->withoutGlobalScope(ByCenterScope::class)
             ->orderBy('id', 'desc')
             ->select('id', 'status', 'date', 'time')
             ->get();
@@ -62,7 +60,6 @@ class AppointmentController
     {
         $appointment = $request->user()->appointments()
             ->with(['center', 'doctor'])
-            ->withoutGlobalScope(ByCenterScope::class)
             ->findOrFail($id);
 
         return response()->json($appointment);

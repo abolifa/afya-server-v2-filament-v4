@@ -3,6 +3,7 @@
 
 @source '../../../../app/Filament/**/*';
 @source '../../../../resources/views/filament/**/*';
+@source '../../../../resources/views/preview/**/*';
 
 
 .fi-sidebar-nav::-webkit-scrollbar {

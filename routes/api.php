@@ -33,6 +33,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 Route::put('/update', [AuthController::class, 'update'])->middleware('auth:sanctum');
 Route::post('/upload-image', [AuthController::class, 'uploadImage'])->middleware('auth:sanctum');
 Route::post('/check-national-id', [AuthController::class, 'checkNationalId']);
+
+
 Route::get('/home', [HomeController::class, 'index'])->middleware('auth:sanctum');
 
 Route::middleware('auth:sanctum')->prefix('orders')->group(function () {

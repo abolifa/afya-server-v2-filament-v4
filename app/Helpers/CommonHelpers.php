@@ -11,6 +11,7 @@ use App\Models\TransferInvoice;
 use App\Models\TransferInvoiceItem;
 use App\Models\Unit;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
 
@@ -243,7 +244,26 @@ class CommonHelpers
         }
         $start = Carbon::parse($schedule->start_time);
         $end = Carbon::parse($schedule->end_time);
-
         return $carbonTime->between($start, $end);
+    }
+
+    public static function getIssueNumber(Model $model): string
+    {
+        $currentYear = Carbon::now()->year;
+        $latest = $model->newQuery()->latest()->value('issue_number');
+        if (is_string($latest) && preg_match('/^(\d+)-(\d{4})$/', $latest, $m)) {
+            [$full, $num, $year] = $m;
+            $num = (int)$num;
+            $year = (int)$year;
+            if ($year === $currentYear) {
+                return ($num + 1) . '-' . $currentYear;
+            }
+        }
+        return '1-' . $currentYear;
+    }
+
+    public static function buildOutgoingQrPayload(string $issue): string
+    {
+        return url('/outgoings/verify/' . $issue);
     }
 }
