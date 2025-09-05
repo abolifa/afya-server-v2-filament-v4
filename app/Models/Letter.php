@@ -101,6 +101,7 @@ class Letter extends Model
                 'autoScriptToLang' => true,
                 'autoLangToFont' => true,
                 'dpi' => 150,
+                'tempDir' => storage_path('app/mpdf_temp'),
 
             ];
             $mpdf = new Mpdf($config);
