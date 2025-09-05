@@ -4,14 +4,17 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Database\Factories\LetterFactory;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
+use Throwable;
 
 class Letter extends Model
 {
@@ -80,51 +83,60 @@ class Letter extends Model
 
     public function generatePdf(): void
     {
-        if ($this->document_path && Storage::disk('public')->exists($this->document_path)) {
-            Storage::disk('public')->delete($this->document_path);
-        }
-        $fileName = "letters/letter_$this->id.pdf";
-        $path = Storage::disk('public')->path($fileName);
-        $html = View::make('print.letter', ['letter' => $this])->render();
-        $config = [
-            'mode' => 'utf-8',
-            'format' => 'A4',
-            'orientation' => 'P',
-            'margin_top' => 50,
-            'margin_right' => 20,
-            'margin_bottom' => 20,
-            'margin_left' => 20,
-            'autoScriptToLang' => true,
-            'autoLangToFont' => true,
-            'dpi' => 150,
-
-        ];
-        $mpdf = new Mpdf($config);
-        if ($this->template && $this->template->letterhead) {
-            $letterheadPath = Storage::disk('public')->path($this->template->letterhead);
-            if (file_exists($letterheadPath)) {
-                $mpdf->SetWatermarkImage($letterheadPath, 1.0, 'P', 'B');
-                $mpdf->showWatermarkImage = true;
-                $mpdf->watermarkImgBehind = true;
+        try {
+            if ($this->document_path && Storage::disk('public')->exists($this->document_path)) {
+                Storage::disk('public')->delete($this->document_path);
             }
-        }
-        $mpdf->SetHTMLHeader('
+            $fileName = "letters/letter_$this->id.pdf";
+            $path = Storage::disk('public')->path($fileName);
+            $html = View::make('print.letter', ['letter' => $this])->render();
+            $config = [
+                'mode' => 'utf-8',
+                'format' => 'A4',
+                'orientation' => 'P',
+                'margin_top' => 50,
+                'margin_right' => 20,
+                'margin_bottom' => 20,
+                'margin_left' => 20,
+                'autoScriptToLang' => true,
+                'autoLangToFont' => true,
+                'dpi' => 150,
+
+            ];
+            $mpdf = new Mpdf($config);
+            if ($this->template && $this->template->letterhead) {
+                $letterheadPath = Storage::disk('public')->path($this->template->letterhead);
+                if (file_exists($letterheadPath)) {
+                    $mpdf->SetWatermarkImage($letterheadPath, 1.0, 'P', 'B');
+                    $mpdf->showWatermarkImage = true;
+                    $mpdf->watermarkImgBehind = true;
+                }
+            }
+            $mpdf->SetHTMLHeader('
     <div style="position: fixed; left: 10px; top: 20px; font-size:12pt; text-align:center;">
         <div>' . Carbon::parse($this->issue_date)->format('d/m/Y') . '</div>
         <div style="margin-top:5px;">' . $this->issue_number . '</div>
     </div>
 ');
 
-        $mpdf->SetHTMLFooter('
+            $mpdf->SetHTMLFooter('
         <div style="text-align: center; font-size: 10pt;">
             صفحة {PAGENO} من {nb}
         </div>
     ');
 
 
-        $mpdf->WriteHTML($html);
-        Storage::disk('public')->put($fileName, $mpdf->Output('', 'S'));
-        $this->updateQuietly(['document_path' => $fileName]);
+            $mpdf->WriteHTML($html);
+            Storage::disk('public')->put($fileName, $mpdf->Output('', 'S'));
+            $this->updateQuietly(['document_path' => $fileName]);
+        } catch (Throwable $e) {
+            Log::error('PDF generation failed: ' . $e->getMessage(), ['trace' => $e->getTraceAsString()]);
+            Notification::make('Error')
+                ->title('PDF generation failed')
+                ->body($e->getMessage())
+                ->danger()
+                ->send();
+        }
     }
 
 
