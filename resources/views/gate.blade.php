@@ -227,7 +227,7 @@
 
 <!-- Hero Branding -->
 <header>
-    <img src="/logo.png" srcset="/logo.png 1x, /logo@2x.png 2x" alt="شعار الهيئة الوطنية لأمراض الكلى" width="140"
+    <img src="/logo.png" alt="شعار الهيئة الوطنية لأمراض الكلى" width="140"
          height="140">
     <h1>الهيئة الوطنية لأمراض الكلى</h1>
     <p>بوابة الخدمات الإلكترونية</p>
