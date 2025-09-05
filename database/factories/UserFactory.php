@@ -34,6 +34,12 @@ class UserFactory extends Factory
             'active' => true,
             'remember_token' => Str::random(10),
             'doctor' => fake()->boolean(),
+            'see_activities' => true,
+            'see_all_stock' => true,
+            'see_all_center' => true,
+            'access_patient' => true,
+            'access_site' => true,
+            'access_archive' => true,
         ];
     }
 }
