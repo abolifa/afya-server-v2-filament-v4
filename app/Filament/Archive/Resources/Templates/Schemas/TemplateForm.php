@@ -64,6 +64,6 @@ class TemplateForm
                     ->visibility('public')
                     ->directory('letterhead')
                     ->label('الختم'),
-            ])->columns(2);
+            ])->columns();
     }
 }

@@ -48,6 +48,15 @@ class LetterInfolist
                             ->columnSpanFull(),
                     ])
                     ->columnSpanFull(),
+
+                Section::make('المرفقات')
+                    ->schema([
+                        ViewEntry::make('attachments')
+                            ->label('المرفقات')
+                            ->view('preview.attachments-preview'),
+                    ])->columnSpanFull()
+                    ->columns(1)
+                    ->hidden(fn($record) => empty($record->attachments)),
             ]);
     }
 }

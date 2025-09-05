@@ -10,7 +10,6 @@ use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -34,6 +33,12 @@ class User extends Authenticatable implements FilamentUser
         'active',
         'doctor',
         'password',
+        'see_activities',
+        'see_all_stock',
+        'see_all_center',
+        'access_patient',
+        'access_site',
+        'access_archive',
     ];
 
     /**
@@ -68,12 +73,18 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->active;
-    }
+        if ($panel->getId() === 'archive') {
+            return $this->active && $this->access_archive;
+        }
 
-    public function whiteList(): HasOne
-    {
-        return $this->hasOne(WhiteList::class, 'user_id');
+        if ($panel->getId() === 'site') {
+            return $this->active && $this->access_site;
+        }
+
+        if ($panel->getId() === 'admin') {
+            return $this->active && $this->access_patient;
+        }
+        return true;
     }
 
     /**

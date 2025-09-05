@@ -46,8 +46,6 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Indigo,
             ])
             ->maxContentWidth('7xl')
-            ->navigationGroups([
-            ])
             ->font('Noto Kufi Arabic')
             ->userMenuItems([
                 Action::make('change')

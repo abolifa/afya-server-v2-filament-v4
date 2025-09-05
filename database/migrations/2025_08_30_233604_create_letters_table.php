@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('letters', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('center_id')->nullable()->constrained('centers')->nullOnDelete();
             $table->string('issue_number')->unique();
             $table->string('qr_code')->unique()->nullable();
             $table->date('issue_date');

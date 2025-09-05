@@ -4,6 +4,7 @@ namespace App\Filament\Archive\Resources\Letters\Schemas;
 
 use App\Helpers\CommonHelpers;
 use App\Models\Center;
+use App\Models\Contact;
 use App\Models\Letter;
 use Carbon\Carbon;
 use Filament\Actions\Action;
@@ -75,6 +76,18 @@ class LetterForm
                             ->preload()
                             ->required(fn(callable $get) => $get('type') === 'external')
                             ->disabled(fn(callable $get) => $get('type') === 'internal')
+                            ->reactive()
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(
+                                function ($state, Set $set) {
+                                    $contact = Contact::find($state);
+                                    if ($contact) {
+                                        $set('to', $contact->name);
+                                    } else {
+                                        $set('to', null);
+                                    }
+                                }
+                            )
                             ->relationship('toContact', 'name'),
                     ])->columnSpanFull()
                     ->columns(),
@@ -110,10 +123,8 @@ class LetterForm
                     ->columnSpanFull(),
                 TagsInput::make('cc')
                     ->placeholder('أضف بريد إلكتروني')
+                    ->columnSpanFull()
                     ->label('نسخة إلى'),
-                TagsInput::make('tags')
-                    ->label('الوسوم')
-                    ->placeholder('أضف وسم'),
                 FileUpload::make('attachments')
                     ->label('المرفقات')
                     ->multiple()

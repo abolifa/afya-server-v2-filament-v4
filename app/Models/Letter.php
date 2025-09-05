@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Mpdf\Mpdf;
@@ -18,6 +19,7 @@ class Letter extends Model
     use HasFactory;
 
     protected $fillable = [
+        'center_id',
         'issue_number',
         'issue_date',
         'type',
@@ -44,20 +46,44 @@ class Letter extends Model
 
     protected static function booted(): void
     {
+        static::creating(function (Letter $letter) {
+            if (Auth::check() && Auth::user()->center_id) {
+                $letter->center_id = Auth::user()->center_id;
+            }
+        });
+
+        static::updating(function (Letter $letter) {
+            if (Auth::check() && Auth::user()->center_id) {
+                $letter->center_id = Auth::user()->center_id;
+            }
+        });
+        static::addGlobalScope('center_scope', function ($builder) {
+            $user = Auth::user();
+
+            if ($user && $user->center_id) {
+                $builder->where(function ($query) use ($user) {
+                    $query->where('center_id', $user->center_id)
+                        ->orWhere('to_center_id', $user->center_id);
+                });
+            }
+        });
+
         static::created(function (Letter $letter) {
             $letter->generatePdf();
         });
+
         static::updated(function (Letter $letter) {
             $letter->generatePdf();
         });
     }
+
 
     public function generatePdf(): void
     {
         if ($this->document_path && Storage::disk('public')->exists($this->document_path)) {
             Storage::disk('public')->delete($this->document_path);
         }
-        $fileName = "letters/letter_{$this->id}.pdf";
+        $fileName = "letters/letter_$this->id.pdf";
         $path = Storage::disk('public')->path($fileName);
         $html = View::make('print.letter', ['letter' => $this])->render();
         $config = [
@@ -101,6 +127,11 @@ class Letter extends Model
         $this->updateQuietly(['document_path' => $fileName]);
     }
 
+
+    public function fromCenter(): BelongsTo
+    {
+        return $this->belongsTo(Center::class, 'center_id');
+    }
 
     public function toCenter(): BelongsTo
     {

@@ -2,8 +2,6 @@
 
 namespace App\Filament\Archive\Resources\Templates\Tables;
 
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\TextColumn;
@@ -16,23 +14,31 @@ class TemplatesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('إسم القالب')
+                    ->sortable()
                     ->searchable(),
                 TextColumn::make('greetings')
-                    ->searchable(),
-                TextColumn::make('body')
+                    ->label('التحية')
+                    ->sortable()
+                    ->limit(50)
+                    ->alignCenter()
                     ->searchable(),
                 TextColumn::make('closing')
-                    ->searchable(),
-                TextColumn::make('letterhead')
-                    ->searchable(),
-                TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('الخاتمة')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->limit(50)
+                    ->alignCenter()
+                    ->searchable(),
+                TextColumn::make('commissioner')
+                    ->label('المفوض')
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->alignCenter()
+                    ->searchable(),
+                TextColumn::make('role')
+                    ->label('الصفة')
+                    ->sortable()
+                    ->alignCenter()
+                    ->searchable(),
             ])
             ->filters([
                 //
@@ -40,11 +46,6 @@ class TemplatesTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
-            ])
-            ->toolbarActions([
-                BulkActionGroup::make([
-                    DeleteBulkAction::make(),
-                ]),
             ]);
     }
 }

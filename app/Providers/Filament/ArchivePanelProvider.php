@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Archive\Widgets\LatestLetters;
+use App\Filament\Archive\Widgets\SystemState;
 use Filament\Actions\Action;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -11,8 +13,6 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -38,6 +38,7 @@ class ArchivePanelProvider extends PanelProvider
                 'primary' => Color::Green,
             ])
             ->brandName('نظام الأرشيف والمراسلة')
+            ->maxContentWidth('7xl')
             ->profile()
             ->login()
             ->viteTheme('resources/css/filament/admin/theme.css')
@@ -46,10 +47,9 @@ class ArchivePanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Archive/Widgets'), for: 'App\Filament\Archive\Widgets')
             ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+                SystemState::class,
+                LatestLetters::class,
             ])
             ->middleware([
                 EncryptCookies::class,

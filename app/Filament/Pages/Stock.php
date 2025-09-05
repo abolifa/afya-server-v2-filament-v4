@@ -40,14 +40,10 @@ class Stock extends Page implements HasTable, HasForms
     public function mount(): void
     {
         $user = Auth::user();
-        $whiteList = $user->whiteList;
-
-        if ($whiteList && $whiteList->can_see_all_stock) {
-            // يقدر يشوف كل المراكز
+        if ($user->see_all_stock) {
             $this->canChangeCenter = true;
-            $this->selectedCenterId = $user->center_id; // يبدأ بمركزه لو عنده
+            $this->selectedCenterId = $user->center_id;
         } else {
-            // ما يقدر يشوف إلا مركزه
             if ($user->center_id) {
                 $this->selectedCenterId = $user->center_id;
                 $this->canChangeCenter = false;

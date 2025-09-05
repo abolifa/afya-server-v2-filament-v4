@@ -1,17 +1,25 @@
 <?php
 
-namespace App\Filament\Archive\Resources\Letters\Tables;
+namespace App\Filament\Archive\Widgets;
 
-use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use App\Models\Letter;
+use Filament\Actions\BulkActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Filament\Widgets\TableWidget;
+use Illuminate\Database\Eloquent\Builder;
 
-class LettersTable
+class LatestLetters extends TableWidget
 {
-    public static function configure(Table $table): Table
+    protected static ?string $heading = 'أحدث الخطابات';
+    protected int|string|array $columnSpan = 'full';
+
+    public function table(Table $table): Table
     {
         return $table
+            ->query(fn(): Builder => Letter::query()->latest()->orderByDesc('created_at'))
+            ->emptyStateHeading('لا توجد خطابات')
+            ->emptyStateIcon('fas-file-alt')
             ->columns([
                 TextColumn::make('issue_number')
                     ->label('إشاري')
@@ -57,15 +65,22 @@ class LettersTable
                     ->label('الموضوع')
                     ->limit(50)
                     ->sortable()
-                    ->searchable()
+                    ->alignCenter()
                     ->searchable(),
             ])
             ->filters([
                 //
             ])
+            ->headerActions([
+                //
+            ])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                //
+            ])
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    //
+                ]),
             ]);
     }
 }
