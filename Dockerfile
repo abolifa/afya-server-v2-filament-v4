@@ -4,13 +4,13 @@ FROM php:8.3-fpm-alpine
 # System deps
 RUN apk add --no-cache \
     git curl zip unzip icu-dev oniguruma-dev libzip-dev \
-    freetype-dev libjpeg-turbo-dev libpng-dev \
+    freetype-dev libjpeg-turbo-dev libpng-dev libwebp-dev libxpm-dev \
     shadow bash mysql-client
 
 # PHP extensions
 RUN docker-php-ext-configure intl \
  && docker-php-ext-install intl pdo_mysql mbstring zip \
- && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
  && docker-php-ext-install gd
 
 # Composer
