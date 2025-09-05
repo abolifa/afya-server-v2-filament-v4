@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Abdurahman',
             'email' => 'admin@gmail.com',
-            'center_id' => $randCenter(),
         ]);
     }
 }
