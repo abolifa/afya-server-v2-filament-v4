@@ -4,11 +4,14 @@ FROM php:8.3-fpm-alpine
 # System deps
 RUN apk add --no-cache \
     git curl zip unzip icu-dev oniguruma-dev libzip-dev \
+    freetype-dev libjpeg-turbo-dev libpng-dev \
     shadow bash mysql-client
 
 # PHP extensions
 RUN docker-php-ext-configure intl \
- && docker-php-ext-install intl pdo_mysql mbstring zip
+ && docker-php-ext-install intl pdo_mysql mbstring zip \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install gd
 
 # Composer
 RUN php -r "copy('https://getcomposer.org/installer','composer-setup.php');" \
@@ -28,7 +31,6 @@ COPY . .
 RUN composer install --no-dev --prefer-dist --no-interaction --no-progress \
  && php artisan package:discover --ansi || true
 
-# Cache/config warmups are done at runtime after .env exists
 # Permissions
 RUN chown -R www-data:www-data /var/www \
  && find storage -type d -exec chmod 775 {} \; || true \
